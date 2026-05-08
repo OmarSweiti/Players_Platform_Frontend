@@ -3,7 +3,25 @@
  */
 
 // User roles (must match backend enum)
-export type UserRole = 'ADMIN' | 'AGENT' | 'PLAYER' | 'STAFF';
+export type UserRole = 
+  | 'SUPER_ADMIN'
+  | 'OWNER'
+  | 'ADMIN'
+  | 'SPORTING_DIRECTOR'
+  | 'SCOUT'
+  | 'COACH'
+  | 'ASSISTANT_COACH'
+  | 'GOALKEEPER_COACH'
+  | 'FITNESS_COACH'
+  | 'MEDICAL'
+  | 'PHYSIOTHERAPIST'
+  | 'LEGAL'
+  | 'FINANCE_MANAGER'
+  | 'PERFORMANCE_ANALYST'
+  | 'VIDEO_ANALYST'
+  | 'TRAINING_MANAGER'
+  | 'PLAYER'
+  | 'GUARDIAN';
 
 // Tenant context
 export interface TenantContext {

@@ -63,4 +63,29 @@ export const queryKeys = {
     conversations: () => [...queryKeys.chat.all, 'conversations'] as const,
     messages: (conversationId: string) => [...queryKeys.chat.all, 'messages', conversationId] as const,
   },
+
+  // Scouting queries
+  scouting: {
+    all: ['scouting'] as const,
+    reports: {
+      all: () => [...queryKeys.scouting.all, 'reports'] as const,
+      lists: () => [...queryKeys.scouting.reports.all(), 'list'] as const,
+      list: (filters: Record<string, unknown>) => [...queryKeys.scouting.reports.lists(), filters] as const,
+      details: () => [...queryKeys.scouting.reports.all(), 'detail'] as const,
+      detail: (id: string) => [...queryKeys.scouting.reports.details(), id] as const,
+      stats: () => [...queryKeys.scouting.reports.all(), 'stats'] as const,
+    },
+    watchlist: {
+      all: () => [...queryKeys.scouting.all, 'watchlist'] as const,
+      myWatchlist: () => [...queryKeys.scouting.watchlist.all(), 'my'] as const,
+      check: (playerId: string) => [...queryKeys.scouting.watchlist.all(), 'check', playerId] as const,
+    },
+    assignments: {
+      all: () => [...queryKeys.scouting.all, 'assignments'] as const,
+      myAssignments: () => [...queryKeys.scouting.assignments.all(), 'my'] as const,
+      directorView: () => [...queryKeys.scouting.assignments.all(), 'director'] as const,
+      details: () => [...queryKeys.scouting.assignments.all(), 'detail'] as const,
+      detail: (id: string) => [...queryKeys.scouting.assignments.details(), id] as const,
+    },
+  },
 } as const;

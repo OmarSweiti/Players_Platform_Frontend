@@ -17,7 +17,8 @@ const protectedRoutes = [
 const authRoutes = ['/login', '/register'];
 
 /**
- * Middleware for route protection and authentication checks
+ * Proxy function for route protection and authentication checks
+ * (Previously called middleware in Next.js < 16)
  * 
  * Features:
  * - Protects dashboard routes from unauthenticated access
@@ -25,7 +26,7 @@ const authRoutes = ['/login', '/register'];
  * - Supports tenant-based routing (future enhancement)
  * - Performance optimized with matcher config
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   
   // Check if user has authentication cookie (HTTP-only)
@@ -47,7 +48,7 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// Configure middleware matcher for optimal performance
+// Configure proxy matcher for optimal performance
 export const config = {
   matcher: [
     /*
