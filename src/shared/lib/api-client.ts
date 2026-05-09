@@ -120,12 +120,14 @@ class ApiClient {
           } catch (refreshError) {
             this.processQueue(refreshError);
             
-            // Refresh failed - redirect to login
-            if (typeof window !== 'undefined') {
-              window.location.href = '/login';
-            }
-            
-            return Promise.reject(refreshError);
+            // Clear auth state by throwing error - let app handle redirect
+            // DO NOT use window.location.href as it bypasses Next.js routing
+            // and can cause Turbopack instability
+            return Promise.reject(new ApiError(
+              401,
+              'Authentication expired. Please log in again.',
+              undefined
+            ));
           } finally {
             this.isRefreshing = false;
           }

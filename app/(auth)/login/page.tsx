@@ -62,6 +62,12 @@ export default function LoginPage() {
           />
         </div>
 
+        <div className="text-right">
+          <Link href={ROUTES.FORGOT_PASSWORD} className="text-sm text-primary hover:underline">
+            Forgot password?
+          </Link>
+        </div>
+
         {loginMutation.error && (
           <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
             {loginMutation.error.message || 'Login failed. Please try again.'}

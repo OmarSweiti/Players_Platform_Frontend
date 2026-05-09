@@ -12,6 +12,9 @@ export interface User {
   tenantId: string;
   isActive: boolean;
   lastLoginAt?: string;
+  emailVerifiedAt?: string;
+  is2FAEnabled: boolean;
+  twoFASecret?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -50,6 +53,36 @@ export interface RegisterPayload {
 export interface RefreshTokenResponse {
   accessToken: string;
   refreshToken: string;
+}
+
+/**
+ * Forgot password payload
+ */
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+/**
+ * Reset password payload
+ */
+export interface ResetPasswordPayload {
+  token: string;
+  newPassword: string;
+}
+
+/**
+ * Change password payload
+ */
+export interface ChangePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+}
+
+/**
+ * Resend verification payload
+ */
+export interface ResendVerificationPayload {
+  email: string;
 }
 
 /**

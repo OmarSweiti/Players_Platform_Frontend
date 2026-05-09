@@ -1,29 +1,33 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { ROUTES } from './src/shared/lib/constants';
 
-// Protected routes that require authentication
-const protectedRoutes = [
-  '/dashboard',
-  '/players',
-  '/contracts',
-  '/training',
-  '/performance',
-  '/legal',
-  '/chat',
-  '/settings',
+/**
+ * Public routes that do NOT require authentication
+ * Using whitelist approach - everything else is protected by default
+ */
+const publicRoutes = [
+  ROUTES.LOGIN,
+  ROUTES.REGISTER,
+  ROUTES.FORGOT_PASSWORD,
+  '/verify-email',
+  '/reset-password',
 ];
 
-// Auth routes that should redirect if already authenticated
-const authRoutes = ['/login', '/register'];
+/**
+ * Auth routes that should redirect authenticated users to dashboard
+ */
+const authRoutes = [ROUTES.LOGIN, ROUTES.REGISTER, ROUTES.FORGOT_PASSWORD];
 
 /**
  * Proxy function for route protection and authentication checks
- * (Previously called middleware in Next.js < 16)
+ * (Next.js 16+ replacement for middleware)
  * 
  * Features:
- * - Protects dashboard routes from unauthenticated access
+ * - Whitelist-based route protection (more secure than blacklist)
  * - Redirects authenticated users away from auth pages
- * - Supports tenant-based routing (future enhancement)
+ * - Preserves intended destination via redirect parameter
+ * - Uses constants for maintainability
  * - Performance optimized with matcher config
  */
 export function proxy(request: NextRequest) {
@@ -31,18 +35,29 @@ export function proxy(request: NextRequest) {
   
   // Check if user has authentication cookie (HTTP-only)
   // Backend sets secure HTTP-only cookies, so we check for their existence
-  const hasAuthCookie = request.cookies.has('accessToken') || request.cookies.has('refreshToken');
+  // Checking multiple possible cookie names for compatibility
+  const hasAuthCookie = 
+    request.cookies.has('accessToken') || 
+    request.cookies.has('refreshToken') || 
+    request.cookies.has('auth_token');
 
-  // Redirect to login if accessing protected route without authentication
-  if (protectedRoutes.some(route => pathname.startsWith(route)) && !hasAuthCookie) {
-    const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('from', pathname); // Preserve intended destination
-    return NextResponse.redirect(loginUrl);
+  const isAuthenticated = hasAuthCookie;
+
+  // If accessing auth pages while authenticated, redirect to dashboard
+  const isAuthRoute = authRoutes.includes(pathname as any);
+  if (isAuthenticated && isAuthRoute) {
+    return NextResponse.redirect(new URL(ROUTES.DASHBOARD, request.url));
   }
 
-  // Redirect to dashboard if accessing auth routes while authenticated
-  if (authRoutes.includes(pathname) && hasAuthCookie) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+  // If accessing protected route while not authenticated, redirect to login
+  const isPublicRoute = publicRoutes.some(route => 
+    pathname === route || pathname.startsWith(route + '/')
+  );
+  
+  if (!isAuthenticated && !isPublicRoute) {
+    const loginUrl = new URL(ROUTES.LOGIN, request.url);
+    loginUrl.searchParams.set('redirect', pathname); // Preserve intended destination
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
