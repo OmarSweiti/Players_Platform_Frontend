@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -7,6 +8,7 @@ import Link from 'next/link';
 import { useRegister } from '@/features/auth/hooks/use-auth';
 import { Button, Input, Label } from '@/shared/ui';
 import { ROUTES, STORAGE_KEYS } from '@/shared/lib/constants';
+import { Check, X } from 'lucide-react';
 
 const registerSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
@@ -20,6 +22,30 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const registerMutation = useRegister();
+  const [password, setPassword] = useState('');
+  
+  // Password strength calculation
+  const getPasswordStrength = (pwd: string) => {
+    let strength = 0;
+    if (pwd.length >= 8) strength++;
+    if (/[A-Z]/.test(pwd)) strength++;
+    if (/[a-z]/.test(pwd)) strength++;
+    if (/[0-9]/.test(pwd)) strength++;
+    if (/[^A-Za-z0-9]/.test(pwd)) strength++;
+    return strength;
+  };
+  
+  const passwordStrength = getPasswordStrength(password);
+  const strengthLabels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
+  const strengthColors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-blue-500', 'bg-green-500'];
+  
+  const passwordRequirements = [
+    { label: 'At least 8 characters', met: password.length >= 8 },
+    { label: 'One uppercase letter', met: /[A-Z]/.test(password) },
+    { label: 'One lowercase letter', met: /[a-z]/.test(password) },
+    { label: 'One number', met: /[0-9]/.test(password) },
+    { label: 'One special character', met: /[^A-Za-z0-9]/.test(password) },
+  ];
   
   const {
     register,
@@ -90,8 +116,47 @@ export default function RegisterPage() {
             type="password"
             placeholder="••••••••"
             error={errors.password?.message}
-            {...register('password')}
+            {...register('password', { onChange: (e) => setPassword(e.target.value) })}
           />
+          {password && (
+            <div className="space-y-2 mt-2">
+              {/* Strength bar */}
+              <div className="flex gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <div
+                    key={i}
+                    className={`h-1 flex-1 rounded-full transition-colors ${
+                      i < passwordStrength ? strengthColors[passwordStrength - 1] : 'bg-gray-200 dark:bg-gray-700'
+                    }`}
+                  />
+                ))}
+              </div>
+              <div className="flex justify-between text-xs">
+                <span className="text-muted-foreground">
+                  Strength: {strengthLabels[passwordStrength - 1] || 'Too short'}
+                </span>
+                <span className={passwordStrength >= 4 ? 'text-green-600' : 'text-muted-foreground'}>
+                  {Math.round((passwordStrength / 5) * 100)}%
+                </span>
+              </div>
+              
+              {/* Requirements checklist */}
+              <div className="grid grid-cols-2 gap-1 text-xs">
+                {passwordRequirements.map((req, idx) => (
+                  <div key={idx} className="flex items-center gap-1">
+                    {req.met ? (
+                      <Check className="h-3 w-3 text-green-600" />
+                    ) : (
+                      <X className="h-3 w-3 text-gray-400" />
+                    )}
+                    <span className={req.met ? 'text-green-600' : 'text-muted-foreground'}>
+                      {req.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="space-y-2">

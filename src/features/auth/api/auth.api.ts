@@ -124,4 +124,18 @@ export const authApi = {
   > => {
     return apiClient.get('/auth/sessions');
   },
+
+  /**
+   * Revoke a specific session
+   */
+  revokeSession: (sessionId: string): Promise<ApiResponse<{ message: string }>> => {
+    return apiClient.post(`/auth/sessions/${sessionId}/revoke`);
+  },
+
+  /**
+   * Logout from all devices
+   */
+  logoutAllDevices: (): Promise<ApiResponse<{ message: string }>> => {
+    return apiClient.post('/auth/logout-all');
+  },
 };

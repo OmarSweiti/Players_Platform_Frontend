@@ -184,3 +184,31 @@ export function useDisable2FA() {
     },
   });
 }
+
+/**
+ * Hook for revoking a specific session
+ */
+export function useRevokeSession() {
+  return useMutation({
+    mutationFn: authApi.revokeSession,
+  });
+}
+
+/**
+ * Hook for logging out from all devices
+ */
+export function useLogoutAllDevices() {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: authApi.logoutAllDevices,
+    onSuccess: () => {
+      // Clear all queries from cache
+      queryClient.clear();
+      
+      // Redirect to login
+      router.push(ROUTES.LOGIN);
+    },
+  });
+}

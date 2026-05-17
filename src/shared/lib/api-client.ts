@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { API_CONFIG, STORAGE_KEYS } from '@/shared/lib/constants';
 import type { ApiResponse } from '@/shared/types';
+import { useRouter } from 'next/navigation';
 
 /**
  * Custom error class for API errors
@@ -120,9 +121,9 @@ class ApiClient {
           } catch (refreshError) {
             this.processQueue(refreshError);
             
-            // Clear auth state by throwing error - let app handle redirect
-            // DO NOT use window.location.href as it bypasses Next.js routing
-            // and can cause Turbopack instability
+            // Auto-logout: Clear client-side state and redirect
+            this.handleAutoLogout();
+            
             return Promise.reject(new ApiError(
               401,
               'Authentication expired. Please log in again.',
@@ -166,6 +167,34 @@ class ApiClient {
   private getTenantId(): string | null {
     if (typeof window === 'undefined') return null;
     return localStorage.getItem(STORAGE_KEYS.TENANT_ID);
+  }
+
+  /**
+   * Handle auto-logout on authentication failure
+   * Clears client-side state and redirects to login page
+   */
+  private handleAutoLogout(): void {
+    if (typeof window === 'undefined') return;
+
+    console.warn('[Auth] Auto-logout triggered: Authentication expired');
+
+    // Clear non-sensitive client-side state
+    localStorage.removeItem(STORAGE_KEYS.TENANT_ID);
+    
+    // Optionally clear other app state
+    sessionStorage.clear();
+
+    // Show user-friendly message
+    if (typeof window !== 'undefined') {
+      // Store logout reason for displaying on login page
+      sessionStorage.setItem('logout_reason', 'session_expired');
+      
+      // Redirect to login using Next.js router (preserves SPA behavior)
+      // Use window.location for full page reload to clear any cached state
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 100);
+    }
   }
 
   /**
