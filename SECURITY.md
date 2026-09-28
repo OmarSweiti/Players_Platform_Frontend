@@ -26,14 +26,14 @@ Expect an acknowledgement within a few working days.
 | Changes arrive through pull requests only, on legal routes | rulesets on `development`, `staging`, `main`; the `topology` required check |
 | Release tags never move or disappear | the `tags-v-append-only` ruleset, which binds the admin too |
 | The code type-checks and builds | the `test` required check |
-| Dependency advisories are raised | Dependabot alerts + security updates; CodeQL default setup |
+| No high or critical npm advisory in the lockfile | `npm audit --audit-level high` in the `supply-chain` required check and the weekly security lane; Dependabot alerts + security updates |
+| Code-level vulnerabilities are looked for | CodeQL default setup (extended suite) on every PR and weekly |
 | Workflow security | SHA-pinned actions (enforced repository-wide), read-only default token, zizmor + actionlint |
 
 ## Known gaps
 
 | Gap | What closes it |
 |---|---|
-| `npm audit --audit-level high` is not a gate yet: 11 advisories at adoption (28 Sep 2026), one critical (`next` ≤ 16.3.2) | the change that resolves them turns the gate on in CI |
 | Lint is not a gate yet: 20 eslint problems at adoption | the change that clears them adds lint to the `test` check |
 | No automated UI or end-to-end tests | a test runner and the first tests, then a CI step |
 | No required approvals: a sole maintainer cannot approve their own PR | `required_approving_review_count: 1` when a second developer arrives |
