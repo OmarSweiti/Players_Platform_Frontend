@@ -100,8 +100,11 @@ note "default GITHUB_TOKEN read-only · Actions cannot approve PRs · every fork
 section "the release environment (its secrets reach v* tags only)"
 put_json PUT "repos/$REPO/environments/release" \
   '{"deployment_branch_policy":{"protected_branches":false,"custom_branch_policies":true}}'
+# On a 404 (a dry run before the environment exists) gh prints the error body
+# on stdout, so anything but a bare count means "none yet".
 have_policy=$(gh api "repos/$REPO/environments/release/deployment-branch-policies" \
-  --jq '[.branch_policies[] | select(.name == "v*" and .type == "tag")] | length' 2>/dev/null || echo 0)
+  --jq '[.branch_policies[] | select(.name == "v*" and .type == "tag")] | length' 2>/dev/null) || have_policy=0
+case "$have_policy" in '' | *[!0-9]*) have_policy=0 ;; esac
 if [ "$have_policy" -gt 0 ]; then
   echo "  tag policy v* exists"
 else
