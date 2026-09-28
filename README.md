@@ -1,36 +1,21 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sodara — frontend
 
-## Getting Started
-
-First, run the development server:
+The web app of the Sodara player-management platform, in Arabic and English: Next.js 16, React 19,
+TypeScript, Tailwind 4. Part of [Players_Platform](https://github.com/OmarSweiti/Players_Platform), which
+holds the plan, the local stack and the progress record — **start there**.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone --recurse-submodules git@github.com:OmarSweiti/Players_Platform.git
+cd Players_Platform && just setup-all && just up              # the whole local stack
+cd frontend && cp .env.example .env.local && npm run dev       # https://sodara.localhost, via the local proxy
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Command | Does |
+|---|---|
+| `just check` | type-check, lint, unit tests and the production build — what CI's required `test` check runs |
+| `npx playwright test` | the browser journeys in Arabic and English, with accessibility checks |
+| `npm run api:generate` | regenerate the typed API client from the backend's committed contract |
+| `just pr '<title>'` · `just merge <URL>` | ship a change through the flow — see `CONTRIBUTING.md` |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Read `AGENTS.md` before writing code**: this Next.js version differs from what most tools and models
+expect. How changes ship: `CONTRIBUTING.md`. Reporting a vulnerability: `SECURITY.md`.
