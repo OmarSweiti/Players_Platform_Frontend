@@ -1,0 +1,26 @@
+title = "Players Platform frontend — secret-scanning policy"
+
+# Keep Gitleaks' maintained rules instead of a snapshot that silently ages.
+# Exceptions are narrow reviewed allowlists HERE — inline `gitleaks:allow`
+# comments are ignored (--ignore-gitleaks-allow) so a secret cannot approve
+# itself in the same change.
+[extend]
+useDefault = true
+
+# Reviewed 2026-09-28, the day the repository went public. These five commits
+# tracked Next.js dev-server output under .next/: the per-build preview-mode and
+# server-action keys `next dev` generates on every start, and a 40-hex hash in a
+# bundled node_modules source map. None is a credential; none works outside the
+# laptop that generated it. Scoped to exactly these commits AND .next/: a real
+# secret anywhere else, or under .next/ in any other commit, still fails.
+[[allowlists]]
+description = "historical Next.js dev-build output under .next/ (reviewed 2026-09-28)"
+condition = "AND"
+commits = [
+  "03cd9429b35e468f8f42c32661c7c78f3f3a3ed9",
+  "5d929df4ecdb15b040457575b24e10d51b77a9c4",
+  "7a1a4ff99b8cfb9ebc59ba3fca54ffedb38cb3e6",
+  "dbe138fb94976f05ef0e2ca1f825715f005c906b",
+  "f09bde2ab0e966bd07689b6e162097a3ce2a80f0",
+]
+paths = ['''^\.next/''']

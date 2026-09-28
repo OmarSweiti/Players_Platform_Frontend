@@ -1,0 +1,18 @@
+# Intended ownership. With one maintainer, no ruleset requires code-owner
+# review (you cannot approve your own PR), so this is governance metadata —
+# ready for the day a second developer arrives — not a merge control.
+*                    @OmarSweiti
+
+# The gates themselves: changing what CI enforces is a change to the law.
+/.github/            @OmarSweiti
+/.githooks/          @OmarSweiti
+/scripts/            @OmarSweiti
+/justfile            @OmarSweiti
+/.gitleaks.toml      @OmarSweiti
+
+# The request gate and the session: every route passes through them.
+/proxy.ts            @OmarSweiti
+/src/features/auth/  @OmarSweiti
+
+# Immutable once committed.
+/docs/adr/           @OmarSweiti

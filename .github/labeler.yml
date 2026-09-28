@@ -1,0 +1,94 @@
+# Path → label, applied by .github/workflows/labeler.yml (sync-labels: true).
+# Labels you have to remember to add are labels nobody adds.
+# `type:` is NOT here on purpose — it comes from the PR title.
+
+# ── area: mirrors the commit scopes (scripts/validate-change-title.sh) ─────
+# A product domain lives in its route segment, its feature folder, and any
+# file named after it (api-medical.ts, scouting.types.ts, …).
+"area: auth":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "app/(auth)/**"
+          - "app/**/settings/2fa/**"
+          - "src/features/auth/**"
+          - "src/components/providers/auth-provider.tsx"
+          - "src/shared/lib/permissions.ts"
+          - "src/shared/lib/role-utils.ts"
+          - "proxy.ts"
+"area: dashboard":
+  - changed-files: [{ any-glob-to-any-file: ["app/(dashboard)/page.tsx", "app/(dashboard)/layout.tsx", "src/features/dashboard/**"] }]
+"area: players":
+  - changed-files: [{ any-glob-to-any-file: ["app/**/players/**", "src/features/players/**", "src/**/*player*"] }]
+"area: contracts":
+  - changed-files: [{ any-glob-to-any-file: ["app/**/contracts/**", "src/features/contracts/**", "src/**/*contract*"] }]
+"area: medical":
+  - changed-files: [{ any-glob-to-any-file: ["app/**/medical/**", "src/features/medical/**", "src/**/*medical*"] }]
+"area: scouting":
+  - changed-files: [{ any-glob-to-any-file: ["app/**/scouting/**", "src/features/scouting/**", "src/**/*scouting*"] }]
+"area: training":
+  - changed-files: [{ any-glob-to-any-file: ["app/**/training/**", "src/features/training/**", "src/**/*training*"] }]
+"area: legal":
+  - changed-files: [{ any-glob-to-any-file: ["app/**/legal/**", "src/features/legal/**", "src/**/*legal*"] }]
+"area: chat":
+  - changed-files: [{ any-glob-to-any-file: ["app/**/chat/**", "src/features/chat/**", "src/**/*chat*"] }]
+"area: notifications":
+  - changed-files: [{ any-glob-to-any-file: ["app/**/notifications/**", "src/features/notifications/**", "src/**/*notification*"] }]
+"area: ui":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/components/**"
+          - "src/shared/ui/**"
+          - "app/globals.css"
+          - "app/favicon.ico"
+          - "public/**"
+"area: core":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "app/layout.tsx"
+          - "app/page.tsx"
+          - "src/components/providers/**"
+          - "src/config/**"
+          - "src/shared/lib/**"
+          - "src/shared/types/**"
+          - "src/types/**"
+          - "proxy.ts"
+          - "next.config.ts"
+          - "tsconfig.json"
+          - "postcss.config.mjs"
+          - "eslint.config.mjs"
+          - "package.json"
+"area: docs":
+  - changed-files: [{ any-glob-to-any-file: ["*.md", "docs/**"] }]
+"area: repo":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**"
+          - ".githooks/**"
+          - "scripts/**"
+          - "justfile"
+          - ".gitattributes"
+          - ".gitignore"
+          - ".gitleaks.toml"
+          - ".nvmrc"
+          - "package-lock.json"
+
+# ── risk: changes HOW a PR is reviewed, not merely where it lands ──────────
+"risk: security":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "app/(auth)/**"
+          - "src/features/auth/**"
+          - "src/components/providers/auth-provider.tsx"
+          - "src/shared/lib/api-client.ts"
+          - "src/shared/lib/permissions.ts"
+          - "src/shared/lib/role-utils.ts"
+          - "proxy.ts" # the request gate: every route passes through it
+          - "next.config.ts"
+          - "**/*secret*"
+          - "**/*crypto*"
+          - ".github/workflows/**"
+          - ".github/dependabot.yml"
+          - ".githooks/**"
+          - "scripts/**"
+          - ".gitleaks.toml"
+          - "SECURITY.md"
