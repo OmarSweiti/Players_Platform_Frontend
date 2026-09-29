@@ -46,6 +46,7 @@ jobs:
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npx --no-install tsc --noEmit
       - name: Production build
+        id: build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         env:
           NEXT_TELEMETRY_DISABLED: 1
@@ -57,6 +58,20 @@ jobs:
       - name: Lint — ESLint with no warnings, against the recorded baseline
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npx --no-install eslint --max-warnings=0
+      # Vitest owns src/**/*.test.{ts,tsx}; Playwright owns tests/**/*.spec.ts.
+      # Both exit non-zero when they find no test, so an emptied suite fails.
+      - name: Unit and component tests — Vitest in jsdom, MSW for the API
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npx --no-install vitest run
+      - name: Install the Playwright browser and its system libraries
+        id: browser
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: npx --no-install playwright install --with-deps chromium
+      - name: Browser journeys — Arabic and English projects, axe on every page
+        if: ${{ !cancelled() && steps.browser.outcome == 'success' }}
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+        run: npx --no-install playwright test
 
   # REQUIRED CHECK. The policy scripts and the git hooks prove they still refuse.
   guards:

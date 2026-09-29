@@ -33,13 +33,13 @@ setup:
     have=$(node --version 2>/dev/null || echo none)
     [ "$have" = "v$want" ] || echo "note: .nvmrc pins Node $want; this shell has $have (CI uses $want)"
     npm ci --no-audit --no-fund
+    npx --no-install playwright install chromium # the browser `just test-e2e` drives
     echo "core.hooksPath=$(git config core.hooksPath)  user.email=$(git config user.email)  tag.gpgSign=$(git config tag.gpgSign || echo unset)"
 
 # Prove every guard still refuses (CI's guards job runs the same script)
 guards:
     bash ./scripts/test-policy.sh
 
-# Lint (not a CI gate yet — see the note in ci.yml)
 # Lint with zero warnings, against eslint-suppressions.json — a CI gate
 lint:
     npx --no-install eslint --max-warnings=0
@@ -56,8 +56,16 @@ typecheck:
 build:
     NEXT_TELEMETRY_DISABLED=1 npm run build
 
+# Unit and component tests in jsdom, API calls answered by MSW: src/**/*.test.{ts,tsx}
+test:
+    npx --no-install vitest run
+
+# Browser journeys in the Arabic and English projects, axe on every page, against a fresh build
+test-e2e: build
+    npx --no-install playwright test
+
 # The same gate as CI's required `test` check
-check: typecheck lint build
+check: typecheck lint build test test-e2e
 
 # The complete local gate: the CI checks, every guard, and a full-history secret scan
 pre-push: check guards

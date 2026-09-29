@@ -41,9 +41,9 @@ just merge                                           # squash, bound to the exac
 
 ## Before you push
 
-`just pre-push` runs the complete local gate: type-check, build, every guard,
-and a full-history secret scan. `just check` alone is exactly the CI `test`
-check.
+`just pre-push` runs the complete local gate: type-check, lint, build, the unit
+tests, the browser journeys, every guard, and a full-history secret scan.
+`just check` alone is exactly the CI `test` check.
 
 The branch rulesets, the required checks, and the hooks are described in
 `.github/rulesets/README.md` and `SECURITY.md`.
