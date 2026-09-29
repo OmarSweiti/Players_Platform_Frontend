@@ -44,7 +44,7 @@ export function proxy(request: NextRequest) {
   const isAuthenticated = hasAuthCookie;
 
   // If accessing auth pages while authenticated, redirect to dashboard
-  const isAuthRoute = authRoutes.includes(pathname as any);
+  const isAuthRoute = (authRoutes as readonly string[]).includes(pathname);
   if (isAuthenticated && isAuthRoute) {
     return NextResponse.redirect(new URL(ROUTES.DASHBOARD, request.url));
   }

@@ -1,7 +1,6 @@
 import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { API_CONFIG, STORAGE_KEYS } from '@/shared/lib/constants';
 import type { ApiResponse } from '@/shared/types';
-import { useRouter } from 'next/navigation';
 
 /**
  * Custom error class for API errors

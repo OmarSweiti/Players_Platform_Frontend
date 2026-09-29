@@ -32,7 +32,7 @@ export interface ScoutingReport {
   potentialRating?: number;
   reportDate: string;
   matchObserved?: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;

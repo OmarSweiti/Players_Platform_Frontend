@@ -19,7 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
  * Provides authentication context to all child components.
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const { data: user, isLoading, isError } = useCurrentUser();
+  const { data: user, isLoading } = useCurrentUser();
 
   const value: AuthContextType = {
     user: user || null,

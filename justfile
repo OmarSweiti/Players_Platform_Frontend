@@ -40,8 +40,13 @@ guards:
     bash ./scripts/test-policy.sh
 
 # Lint (not a CI gate yet — see the note in ci.yml)
+# Lint with zero warnings, against eslint-suppressions.json — a CI gate
 lint:
-    npx --no-install eslint
+    npx --no-install eslint --max-warnings=0
+
+# After fixing or deleting baselined code: drop the suppressions that no longer occur
+lint-prune:
+    npx --no-install eslint --prune-suppressions
 
 # Type-check every TypeScript file, imported or not
 typecheck:
@@ -52,7 +57,7 @@ build:
     NEXT_TELEMETRY_DISABLED=1 npm run build
 
 # The same gate as CI's required `test` check
-check: typecheck build
+check: typecheck lint build
 
 # The complete local gate: the CI checks, every guard, and a full-history secret scan
 pre-push: check guards

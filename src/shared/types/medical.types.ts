@@ -16,7 +16,7 @@ export interface MedicalRecord {
   recoveryDate?: string;
   returnToPlayDate?: string;
   isConfidential: boolean;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
