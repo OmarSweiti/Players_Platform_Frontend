@@ -7,7 +7,7 @@ holds the plan, the local stack and the progress record — **start there**.
 ```bash
 git clone --recurse-submodules git@github.com:OmarSweiti/Players_Platform.git
 cd Players_Platform && just setup-all && just up              # the whole local stack
-cd frontend && cp .env.example .env.local && npm run dev       # https://sadara.localhost, via the local proxy
+cd frontend && npm run dev                                     # :3001, served at https://sadara.localhost by the local proxy
 ```
 
 | Command | Does |
