@@ -5,6 +5,8 @@ set shell := ["bash", "-euo", "pipefail", "-c"]
 
 email := "omarswaty4@gmail.com" # the address linked to the GitHub account
 signing_key := env_var("HOME") / ".ssh/id_ed25519.pub" # uploaded to GitHub as a *Signing* key
+# The application code Prettier formats; Markdown, YAML and the shared kit files stay as written
+formatted := '"app/**/*.{ts,tsx,css}" "src/**/*.{ts,tsx,css}" "tests/**/*.ts" "*.{ts,mts,mjs}"'
 
 # List recipes
 default:
@@ -20,6 +22,8 @@ setup:
     # .git/config is not versioned: without this a clone inherits whatever
     # global identity the machine has, and its commits stop resolving to you.
     git config --local user.email "{{ email }}"
+    # `git blame` skips formatting-only commits, as GitHub's blame view does
+    git config --local blame.ignoreRevsFile .git-blame-ignore-revs
     if [ -f "{{ signing_key }}" ]; then
       git config --local gpg.format ssh
       git config --local user.signingkey "{{ signing_key }}"
@@ -40,9 +44,14 @@ setup:
 guards:
     bash ./scripts/test-policy.sh
 
-# Lint with zero warnings, against eslint-suppressions.json — a CI gate
+# Lint (zero warnings, against eslint-suppressions.json) and format — CI gates
 lint:
     npx --no-install eslint --max-warnings=0
+    npx --no-install prettier --check {{ formatted }}
+
+# Rewrite the application code in Prettier's format
+format:
+    npx --no-install prettier --write {{ formatted }}
 
 # After fixing or deleting baselined code: drop the suppressions that no longer occur
 lint-prune:

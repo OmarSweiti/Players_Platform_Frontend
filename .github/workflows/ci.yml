@@ -58,6 +58,9 @@ jobs:
       - name: Lint — ESLint with no warnings, against the recorded baseline
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npx --no-install eslint --max-warnings=0
+      - name: Format — the application code is Prettier-formatted
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npx --no-install prettier --check "app/**/*.{ts,tsx,css}" "src/**/*.{ts,tsx,css}" "tests/**/*.ts" "*.{ts,mts,mjs}"
       # Vitest owns src/**/*.test.{ts,tsx}; Playwright owns tests/**/*.spec.ts.
       # Both exit non-zero when they find no test, so an emptied suite fails.
       - name: Unit and component tests — Vitest in jsdom, MSW for the API
