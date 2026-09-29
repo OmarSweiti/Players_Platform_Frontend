@@ -50,9 +50,13 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: 1
         run: npm run build
-      # Lint is not a gate yet: at adoption (28 Sep 2026) eslint reported 20
-      # problems (13 errors). The change that clears them adds the step here, so
-      # this job never claims a check it does not make. Until then: `just lint`.
+      # Zero warnings. Findings in pages the plan deletes (the local sign-in
+      # pages, 0.1.7; the old API client, 0.9.4) are recorded in
+      # eslint-suppressions.json: a new one fails, and a fixed one fails too
+      # until `just lint-prune` removes it, so the baseline only shrinks.
+      - name: Lint — ESLint with no warnings, against the recorded baseline
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npx --no-install eslint --max-warnings=0
 
   # REQUIRED CHECK. The policy scripts and the git hooks prove they still refuse.
   guards:
