@@ -3,7 +3,10 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useVerifyEmail, useResendVerification } from '@/features/auth/hooks/use-auth';
+import {
+  useVerifyEmail,
+  useResendVerification,
+} from '@/features/auth/hooks/use-auth';
 import { Button, Label, Input } from '@/shared/ui';
 import { ROUTES } from '@/shared/lib/constants';
 import { LoadingSpinner } from '@/components/shared';
@@ -13,13 +16,15 @@ export default function VerifyEmailContent() {
   const router = useRouter();
   const verifyEmailMutation = useVerifyEmail();
   const resendVerificationMutation = useResendVerification();
-  const [status, setStatus] = useState<'verifying' | 'success' | 'error'>('verifying');
+  const [status, setStatus] = useState<'verifying' | 'success' | 'error'>(
+    'verifying',
+  );
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [email, setEmail] = useState<string>('');
 
   useEffect(() => {
     const token = searchParams.get('token');
-    
+
     if (!token) {
       setStatus('error');
       setErrorMessage('Invalid verification link');
@@ -51,9 +56,11 @@ export default function VerifyEmailContent() {
           alert('Verification email sent successfully!');
         },
         onError: (error) => {
-          setErrorMessage(error.message || 'Failed to resend verification email');
+          setErrorMessage(
+            error.message || 'Failed to resend verification email',
+          );
         },
-      }
+      },
     );
   };
 
@@ -122,12 +129,17 @@ export default function VerifyEmailContent() {
           className="w-full"
           isLoading={resendVerificationMutation.isPending}
         >
-          {resendVerificationMutation.isPending ? 'Sending...' : 'Resend Verification Email'}
+          {resendVerificationMutation.isPending
+            ? 'Sending...'
+            : 'Resend Verification Email'}
         </Button>
       </div>
 
       <div className="text-center text-sm">
-        <Link href={ROUTES.LOGIN} className="font-medium text-primary hover:underline">
+        <Link
+          href={ROUTES.LOGIN}
+          className="font-medium text-primary hover:underline"
+        >
           Back to login
         </Link>
       </div>

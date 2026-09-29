@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 /**
  * React Query Provider with optimized defaults
- * 
+ *
  * Configuration:
  * - Stale time: 60 seconds (balances freshness and performance)
  * - Retry: 1 attempt (avoids excessive retries on failures)
@@ -28,13 +28,15 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
             retry: 0, // Don't retry mutations by default
           },
         },
-      })
+      }),
   );
 
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
+      {process.env.NODE_ENV === 'development' && (
+        <ReactQueryDevtools initialIsOpen={false} />
+      )}
     </QueryClientProvider>
   );
 }

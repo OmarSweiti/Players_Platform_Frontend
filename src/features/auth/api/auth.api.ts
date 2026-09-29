@@ -54,21 +54,27 @@ export const authApi = {
   /**
    * Request password reset email
    */
-  forgotPassword: (data: ForgotPasswordPayload): Promise<ApiResponse<{ message: string }>> => {
+  forgotPassword: (
+    data: ForgotPasswordPayload,
+  ): Promise<ApiResponse<{ message: string }>> => {
     return apiClient.post('/auth/forgot-password', data);
   },
 
   /**
    * Reset password with token
    */
-  resetPassword: (data: ResetPasswordPayload): Promise<ApiResponse<{ message: string }>> => {
+  resetPassword: (
+    data: ResetPasswordPayload,
+  ): Promise<ApiResponse<{ message: string }>> => {
     return apiClient.post('/auth/reset-password', data);
   },
 
   /**
    * Change password for logged-in user
    */
-  changePassword: (data: ChangePasswordPayload): Promise<ApiResponse<{ message: string }>> => {
+  changePassword: (
+    data: ChangePasswordPayload,
+  ): Promise<ApiResponse<{ message: string }>> => {
     return apiClient.post('/auth/change-password', data);
   },
 
@@ -82,28 +88,36 @@ export const authApi = {
   /**
    * Resend verification email
    */
-  resendVerification: (data: ResendVerificationPayload): Promise<ApiResponse<{ message: string }>> => {
+  resendVerification: (
+    data: ResendVerificationPayload,
+  ): Promise<ApiResponse<{ message: string }>> => {
     return apiClient.post('/auth/resend-verification', data);
   },
 
   /**
    * Enable 2FA - generates QR code
    */
-  enable2FA: (): Promise<ApiResponse<{ secret: string; qrCode: string; message: string }>> => {
+  enable2FA: (): Promise<
+    ApiResponse<{ secret: string; qrCode: string; message: string }>
+  > => {
     return apiClient.post('/auth/2fa/enable');
   },
 
   /**
    * Verify and enable 2FA
    */
-  verify2FA: (data: { token: string }): Promise<ApiResponse<{ message: string; is2FAEnabled: boolean }>> => {
+  verify2FA: (data: {
+    token: string;
+  }): Promise<ApiResponse<{ message: string; is2FAEnabled: boolean }>> => {
     return apiClient.post('/auth/2fa/verify', data);
   },
 
   /**
    * Disable 2FA
    */
-  disable2FA: (data: { token: string }): Promise<ApiResponse<{ message: string; is2FAEnabled: boolean }>> => {
+  disable2FA: (data: {
+    token: string;
+  }): Promise<ApiResponse<{ message: string; is2FAEnabled: boolean }>> => {
     return apiClient.post('/auth/2fa/disable', data);
   },
 
@@ -128,7 +142,9 @@ export const authApi = {
   /**
    * Revoke a specific session
    */
-  revokeSession: (sessionId: string): Promise<ApiResponse<{ message: string }>> => {
+  revokeSession: (
+    sessionId: string,
+  ): Promise<ApiResponse<{ message: string }>> => {
     return apiClient.post(`/auth/sessions/${sessionId}/revoke`);
   },
 

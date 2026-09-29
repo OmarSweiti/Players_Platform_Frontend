@@ -19,7 +19,10 @@ export const medicalRecordsApi = {
    * Create a new medical record
    */
   async create(data: CreateMedicalRecordInput) {
-    const response = await apiClient.post<{ data: MedicalRecord }>('/medical/records', data);
+    const response = await apiClient.post<{ data: MedicalRecord }>(
+      '/medical/records',
+      data,
+    );
     return response.data;
   },
 
@@ -33,24 +36,30 @@ export const medicalRecordsApi = {
     page?: number;
     limit?: number;
   }) {
-    const response = await apiClient.get<PaginatedResponse<MedicalRecord>>('/medical/records', {
-      params,
-    });
+    const response = await apiClient.get<PaginatedResponse<MedicalRecord>>(
+      '/medical/records',
+      {
+        params,
+      },
+    );
     return response.data;
   },
 
   /**
    * Get medical records for a specific player
    */
-  async getByPlayer(playerId: string, params?: {
-    injuryType?: string;
-    isConfidential?: boolean;
-    page?: number;
-    limit?: number;
-  }) {
+  async getByPlayer(
+    playerId: string,
+    params?: {
+      injuryType?: string;
+      isConfidential?: boolean;
+      page?: number;
+      limit?: number;
+    },
+  ) {
     const response = await apiClient.get<PaginatedResponse<MedicalRecord>>(
       `/medical/records/player/${playerId}`,
-      { params }
+      { params },
     );
     return response.data;
   },
@@ -59,7 +68,9 @@ export const medicalRecordsApi = {
    * Get medical record by ID
    */
   async getById(id: string) {
-    const response = await apiClient.get<{ data: MedicalRecord }>(`/medical/records/${id}`);
+    const response = await apiClient.get<{ data: MedicalRecord }>(
+      `/medical/records/${id}`,
+    );
     return response.data;
   },
 
@@ -69,7 +80,7 @@ export const medicalRecordsApi = {
   async update(id: string, data: UpdateMedicalRecordInput) {
     const response = await apiClient.patch<{ data: MedicalRecord }>(
       `/medical/records/${id}`,
-      data
+      data,
     );
     return response.data;
   },
@@ -87,7 +98,7 @@ export const medicalRecordsApi = {
    */
   async getActiveInjuries(playerId: string) {
     const response = await apiClient.get<{ data: MedicalRecord[] }>(
-      `/medical/records/player/${playerId}/active-injuries`
+      `/medical/records/player/${playerId}/active-injuries`,
     );
     return response.data;
   },
@@ -97,7 +108,7 @@ export const medicalRecordsApi = {
    */
   async getInjuryHistory(playerId: string) {
     const response = await apiClient.get<{ data: InjuryHistoryStats }>(
-      `/medical/records/player/${playerId}/history`
+      `/medical/records/player/${playerId}/history`,
     );
     return response.data;
   },
@@ -111,24 +122,30 @@ export const treatmentSessionsApi = {
    * Create a new treatment session
    */
   async create(data: CreateTreatmentSessionInput) {
-    const response = await apiClient.post<{ data: TreatmentSession }>('/medical/sessions', data);
+    const response = await apiClient.post<{ data: TreatmentSession }>(
+      '/medical/sessions',
+      data,
+    );
     return response.data;
   },
 
   /**
    * Get treatment sessions for a player
    */
-  async getByPlayer(playerId: string, params?: {
-    status?: string;
-    medicalRecordId?: string;
-    dateFrom?: string;
-    dateTo?: string;
-    page?: number;
-    limit?: number;
-  }) {
+  async getByPlayer(
+    playerId: string,
+    params?: {
+      status?: string;
+      medicalRecordId?: string;
+      dateFrom?: string;
+      dateTo?: string;
+      page?: number;
+      limit?: number;
+    },
+  ) {
     const response = await apiClient.get<PaginatedResponse<TreatmentSession>>(
       `/medical/sessions/player/${playerId}`,
-      { params }
+      { params },
     );
     return response.data;
   },
@@ -137,7 +154,9 @@ export const treatmentSessionsApi = {
    * Get treatment session by ID
    */
   async getById(id: string) {
-    const response = await apiClient.get<{ data: TreatmentSession }>(`/medical/sessions/${id}`);
+    const response = await apiClient.get<{ data: TreatmentSession }>(
+      `/medical/sessions/${id}`,
+    );
     return response.data;
   },
 
@@ -147,7 +166,7 @@ export const treatmentSessionsApi = {
   async update(id: string, data: UpdateTreatmentSessionInput) {
     const response = await apiClient.patch<{ data: TreatmentSession }>(
       `/medical/sessions/${id}`,
-      data
+      data,
     );
     return response.data;
   },
@@ -158,7 +177,7 @@ export const treatmentSessionsApi = {
   async updateStatus(id: string, status: string) {
     const response = await apiClient.patch<{ data: TreatmentSession }>(
       `/medical/sessions/${id}/status`,
-      { status }
+      { status },
     );
     return response.data;
   },
@@ -176,7 +195,7 @@ export const treatmentSessionsApi = {
    */
   async getUpcoming(playerId: string) {
     const response = await apiClient.get<{ data: TreatmentSession[] }>(
-      `/medical/sessions/player/${playerId}/upcoming`
+      `/medical/sessions/player/${playerId}/upcoming`,
     );
     return response.data;
   },
@@ -186,7 +205,7 @@ export const treatmentSessionsApi = {
    */
   async getStats(playerId: string) {
     const response = await apiClient.get<{ data: TreatmentSessionStats }>(
-      `/medical/sessions/player/${playerId}/stats`
+      `/medical/sessions/player/${playerId}/stats`,
     );
     return response.data;
   },

@@ -22,7 +22,7 @@ export default function LoginPage() {
   const loginMutation = useLogin();
   const [sessionExpired, setSessionExpired] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  
+
   // Check if user was redirected due to session expiry
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -34,7 +34,7 @@ export default function LoginPage() {
       }
     }
   }, []);
-  
+
   const {
     register,
     handleSubmit,
@@ -65,7 +65,7 @@ export default function LoginPage() {
           </div>
         </div>
       )}
-      
+
       <div className="space-y-2 text-center">
         <h1 className="text-3xl font-bold">Welcome Back</h1>
         <p className="text-muted-foreground">
@@ -119,11 +119,17 @@ export default function LoginPage() {
               className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
               {...register('rememberMe')}
             />
-            <Label htmlFor="rememberMe" className="text-sm font-normal cursor-pointer">
+            <Label
+              htmlFor="rememberMe"
+              className="text-sm font-normal cursor-pointer"
+            >
               Remember me
             </Label>
           </div>
-          <Link href={ROUTES.FORGOT_PASSWORD} className="text-sm text-primary hover:underline">
+          <Link
+            href={ROUTES.FORGOT_PASSWORD}
+            className="text-sm text-primary hover:underline"
+          >
             Forgot password?
           </Link>
         </div>
@@ -144,8 +150,13 @@ export default function LoginPage() {
       </form>
 
       <div className="text-center text-sm">
-        <span className="text-muted-foreground">Don&apos;t have an account? </span>
-        <Link href={ROUTES.REGISTER} className="font-medium text-primary hover:underline">
+        <span className="text-muted-foreground">
+          Don&apos;t have an account?{' '}
+        </span>
+        <Link
+          href={ROUTES.REGISTER}
+          className="font-medium text-primary hover:underline"
+        >
           Sign up
         </Link>
       </div>

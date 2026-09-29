@@ -26,7 +26,7 @@ export const ROUTES = {
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: (token: string) => `/reset-password?token=${token}`,
   VERIFY_EMAIL: (token: string) => `/verify-email?token=${token}`,
-  
+
   // Dashboard routes
   DASHBOARD: '/dashboard',
   PLAYERS: '/dashboard/players',

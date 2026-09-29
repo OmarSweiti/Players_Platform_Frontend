@@ -14,7 +14,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 /**
  * Auth Provider - Manages authentication state across the application
- * 
+ *
  * Uses React Query's useCurrentUser hook to fetch and cache user data.
  * Provides authentication context to all child components.
  */
@@ -35,10 +35,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
  */
 export function useAuth() {
   const context = useContext(AuthContext);
-  
+
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
-  
+
   return context;
 }

@@ -18,7 +18,7 @@ type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 export default function ForgotPasswordPage() {
   const forgotPasswordMutation = useForgotPassword();
   const [isSuccess, setIsSuccess] = useState(false);
-  
+
   const {
     register,
     handleSubmit,
@@ -41,13 +41,14 @@ export default function ForgotPasswordPage() {
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Check Your Email</h1>
           <p className="text-muted-foreground">
-            If an account exists with this email, we&apos;ve sent you a password reset link.
+            If an account exists with this email, we&apos;ve sent you a password
+            reset link.
           </p>
         </div>
 
         <div className="rounded-md bg-green-50 p-4 text-sm text-green-800 dark:bg-green-900/20 dark:text-green-400">
-          Please check your email and follow the instructions to reset your password.
-          The link will expire in 1 hour.
+          Please check your email and follow the instructions to reset your
+          password. The link will expire in 1 hour.
         </div>
 
         <Link href={ROUTES.LOGIN}>
@@ -80,7 +81,8 @@ export default function ForgotPasswordPage() {
 
         {forgotPasswordMutation.error && (
           <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-            {forgotPasswordMutation.error.message || 'Failed to send reset email. Please try again.'}
+            {forgotPasswordMutation.error.message ||
+              'Failed to send reset email. Please try again.'}
           </div>
         )}
 
@@ -94,7 +96,10 @@ export default function ForgotPasswordPage() {
       </form>
 
       <div className="text-center text-sm">
-        <Link href={ROUTES.LOGIN} className="font-medium text-primary hover:underline">
+        <Link
+          href={ROUTES.LOGIN}
+          className="font-medium text-primary hover:underline"
+        >
           Back to login
         </Link>
       </div>

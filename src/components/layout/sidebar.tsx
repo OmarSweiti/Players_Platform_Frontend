@@ -37,7 +37,10 @@ export function Sidebar() {
   return (
     <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:border-r bg-background">
       <div className="flex h-16 items-center border-b px-6">
-        <Link href={ROUTES.DASHBOARD} className="flex items-center gap-2 font-bold text-xl">
+        <Link
+          href={ROUTES.DASHBOARD}
+          className="flex items-center gap-2 font-bold text-xl"
+        >
           ⚽ Players Platform
         </Link>
       </div>
@@ -45,7 +48,8 @@ export function Sidebar() {
       <nav className="flex-1 overflow-y-auto p-4">
         <ul className="space-y-1">
           {navigation.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+            const isActive =
+              pathname === item.href || pathname.startsWith(item.href + '/');
             return (
               <li key={item.name}>
                 <Link
@@ -54,7 +58,7 @@ export function Sidebar() {
                     'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
                     isActive
                       ? 'bg-primary text-primary-foreground'
-                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
                   )}
                 >
                   <item.icon className="h-5 w-5" />
@@ -68,7 +72,9 @@ export function Sidebar() {
 
       <div className="border-t p-4">
         <div className="mb-4 px-3">
-          <p className="text-sm font-medium">{user?.firstName} {user?.lastName}</p>
+          <p className="text-sm font-medium">
+            {user?.firstName} {user?.lastName}
+          </p>
           <p className="text-xs text-muted-foreground">{user?.email}</p>
         </div>
         <Button

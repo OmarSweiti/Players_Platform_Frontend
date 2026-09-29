@@ -18,7 +18,7 @@ export function useLogin() {
     onSuccess: () => {
       // Invalidate and refetch current user query
       queryClient.invalidateQueries({ queryKey: queryKeys.auth.currentUser() });
-      
+
       // Redirect to dashboard
       router.push(ROUTES.DASHBOARD);
     },
@@ -37,7 +37,7 @@ export function useRegister() {
     onSuccess: () => {
       // Invalidate and refetch current user query
       queryClient.invalidateQueries({ queryKey: queryKeys.auth.currentUser() });
-      
+
       // Redirect to dashboard
       router.push(ROUTES.DASHBOARD);
     },
@@ -56,7 +56,7 @@ export function useLogout() {
     onSuccess: () => {
       // Clear all queries from cache
       queryClient.clear();
-      
+
       // Use Next.js router for proper navigation
       router.push(ROUTES.LOGIN);
     },
@@ -82,10 +82,11 @@ export function useCurrentUser() {
     staleTime: 5 * 60 * 1000, // 5 minutes
     // Only run query if we have auth cookies (checked via a simple heuristic)
     // This prevents unnecessary API calls on public routes like /login
-    enabled: typeof window !== 'undefined' && 
-             (document.cookie.includes('accessToken') || 
-              document.cookie.includes('refreshToken') ||
-              document.cookie.includes('auth_token')),
+    enabled:
+      typeof window !== 'undefined' &&
+      (document.cookie.includes('accessToken') ||
+        document.cookie.includes('refreshToken') ||
+        document.cookie.includes('auth_token')),
   });
 }
 
@@ -206,7 +207,7 @@ export function useLogoutAllDevices() {
     onSuccess: () => {
       // Clear all queries from cache
       queryClient.clear();
-      
+
       // Redirect to login
       router.push(ROUTES.LOGIN);
     },
