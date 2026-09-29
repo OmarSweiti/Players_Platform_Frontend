@@ -1,13 +1,13 @@
-# Sodara — frontend
+# Sadara — frontend
 
-The web app of the Sodara player-management platform, in Arabic and English: Next.js 16, React 19,
+The web app of the Sadara player-management platform, in Arabic and English: Next.js 16, React 19,
 TypeScript, Tailwind 4. Part of [Players_Platform](https://github.com/OmarSweiti/Players_Platform), which
 holds the plan, the local stack and the progress record — **start there**.
 
 ```bash
 git clone --recurse-submodules git@github.com:OmarSweiti/Players_Platform.git
 cd Players_Platform && just setup-all && just up              # the whole local stack
-cd frontend && cp .env.example .env.local && npm run dev       # https://sodara.localhost, via the local proxy
+cd frontend && cp .env.example .env.local && npm run dev       # https://sadara.localhost, via the local proxy
 ```
 
 | Command | Does |
