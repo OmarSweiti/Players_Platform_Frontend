@@ -12,7 +12,8 @@ cd frontend && cp .env.example .env.local && npm run dev       # https://sadara.
 
 | Command | Does |
 |---|---|
-| `just check` | type-check, lint, the production build, the unit tests and the browser journeys — what CI's required `test` check runs |
+| `just check` | type-check, lint and formatting, the production build, the unit tests and the browser journeys — what CI's required `test` check runs |
+| `just format` | rewrite the application code in Prettier's format |
 | `just test` · `just test-e2e` | the unit and component tests (Vitest) · the browser journeys in Arabic and English, with accessibility checks (Playwright, axe) |
 | `npm run api:generate` | regenerate the typed API client from the backend's committed contract |
 | `just pr '<title>'` · `just merge <URL>` | ship a change through the flow — see `CONTRIBUTING.md` |
