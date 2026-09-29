@@ -56,3 +56,15 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "@types/react-dom"
         update-types: ["version-update:semver-major"]
+      # A TypeScript major needs the toolchain to support it first: TypeScript 7
+      # fails the lint gate with "typescript-eslint does not support TS 7.0"
+      # (#28). Move it deliberately once typescript-eslint and Next.js support it.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      # ESLint 10 waits for the plugins eslint-config-next bundles: today
+      # eslint-plugin-react still calls context.getFilename(), which ESLint 10
+      # removed (#26). Move it with eslint-config-next, deliberately.
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@eslint/*"
+        update-types: ["version-update:semver-major"]
