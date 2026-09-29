@@ -23,7 +23,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 export default function RegisterPage() {
   const registerMutation = useRegister();
   const [password, setPassword] = useState('');
-  
+
   // Password strength calculation
   const getPasswordStrength = (pwd: string) => {
     let strength = 0;
@@ -34,11 +34,17 @@ export default function RegisterPage() {
     if (/[^A-Za-z0-9]/.test(pwd)) strength++;
     return strength;
   };
-  
+
   const passwordStrength = getPasswordStrength(password);
   const strengthLabels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
-  const strengthColors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-blue-500', 'bg-green-500'];
-  
+  const strengthColors = [
+    'bg-red-500',
+    'bg-orange-500',
+    'bg-yellow-500',
+    'bg-blue-500',
+    'bg-green-500',
+  ];
+
   const passwordRequirements = [
     { label: 'At least 8 characters', met: password.length >= 8 },
     { label: 'One uppercase letter', met: /[A-Z]/.test(password) },
@@ -46,7 +52,7 @@ export default function RegisterPage() {
     { label: 'One number', met: /[0-9]/.test(password) },
     { label: 'One special character', met: /[^A-Za-z0-9]/.test(password) },
   ];
-  
+
   const {
     register,
     handleSubmit,
@@ -54,7 +60,10 @@ export default function RegisterPage() {
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      tenantId: typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.TENANT_ID) || '' : '',
+      tenantId:
+        typeof window !== 'undefined'
+          ? localStorage.getItem(STORAGE_KEYS.TENANT_ID) || ''
+          : '',
     },
   });
 
@@ -116,7 +125,9 @@ export default function RegisterPage() {
             type="password"
             placeholder="••••••••"
             error={errors.password?.message}
-            {...register('password', { onChange: (e) => setPassword(e.target.value) })}
+            {...register('password', {
+              onChange: (e) => setPassword(e.target.value),
+            })}
           />
           {password && (
             <div className="space-y-2 mt-2">
@@ -126,20 +137,29 @@ export default function RegisterPage() {
                   <div
                     key={i}
                     className={`h-1 flex-1 rounded-full transition-colors ${
-                      i < passwordStrength ? strengthColors[passwordStrength - 1] : 'bg-gray-200 dark:bg-gray-700'
+                      i < passwordStrength
+                        ? strengthColors[passwordStrength - 1]
+                        : 'bg-gray-200 dark:bg-gray-700'
                     }`}
                   />
                 ))}
               </div>
               <div className="flex justify-between text-xs">
                 <span className="text-muted-foreground">
-                  Strength: {strengthLabels[passwordStrength - 1] || 'Too short'}
+                  Strength:{' '}
+                  {strengthLabels[passwordStrength - 1] || 'Too short'}
                 </span>
-                <span className={passwordStrength >= 4 ? 'text-green-600' : 'text-muted-foreground'}>
+                <span
+                  className={
+                    passwordStrength >= 4
+                      ? 'text-green-600'
+                      : 'text-muted-foreground'
+                  }
+                >
                   {Math.round((passwordStrength / 5) * 100)}%
                 </span>
               </div>
-              
+
               {/* Requirements checklist */}
               <div className="grid grid-cols-2 gap-1 text-xs">
                 {passwordRequirements.map((req, idx) => (
@@ -149,7 +169,11 @@ export default function RegisterPage() {
                     ) : (
                       <X className="h-3 w-3 text-gray-400" />
                     )}
-                    <span className={req.met ? 'text-green-600' : 'text-muted-foreground'}>
+                    <span
+                      className={
+                        req.met ? 'text-green-600' : 'text-muted-foreground'
+                      }
+                    >
                       {req.label}
                     </span>
                   </div>
@@ -174,7 +198,8 @@ export default function RegisterPage() {
 
         {registerMutation.error && (
           <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-            {registerMutation.error.message || 'Registration failed. Please try again.'}
+            {registerMutation.error.message ||
+              'Registration failed. Please try again.'}
           </div>
         )}
 
@@ -183,13 +208,18 @@ export default function RegisterPage() {
           className="w-full"
           isLoading={registerMutation.isPending}
         >
-          {registerMutation.isPending ? 'Creating account...' : 'Create Account'}
+          {registerMutation.isPending
+            ? 'Creating account...'
+            : 'Create Account'}
         </Button>
       </form>
 
       <div className="text-center text-sm">
         <span className="text-muted-foreground">Already have an account? </span>
-        <Link href={ROUTES.LOGIN} className="font-medium text-primary hover:underline">
+        <Link
+          href={ROUTES.LOGIN}
+          className="font-medium text-primary hover:underline"
+        >
           Sign in
         </Link>
       </div>

@@ -21,7 +21,10 @@ export const scoutingReportsApi = {
    * Create a new scouting report
    */
   async create(data: CreateScoutingReportInput) {
-    const response = await apiClient.post<{ data: ScoutingReport }>('/scouting/reports', data);
+    const response = await apiClient.post<{ data: ScoutingReport }>(
+      '/scouting/reports',
+      data,
+    );
     return response.data;
   },
 
@@ -29,9 +32,12 @@ export const scoutingReportsApi = {
    * Get all scouting reports with pagination and filters
    */
   async getAll(params?: QueryScoutingReportsParams) {
-    const response = await apiClient.get<PaginatedResponse<ScoutingReport>>('/scouting/reports', {
-      params,
-    });
+    const response = await apiClient.get<PaginatedResponse<ScoutingReport>>(
+      '/scouting/reports',
+      {
+        params,
+      },
+    );
     return response.data;
   },
 
@@ -39,7 +45,9 @@ export const scoutingReportsApi = {
    * Get scouting report by ID
    */
   async getById(id: string) {
-    const response = await apiClient.get<{ data: ScoutingReport }>(`/scouting/reports/${id}`);
+    const response = await apiClient.get<{ data: ScoutingReport }>(
+      `/scouting/reports/${id}`,
+    );
     return response.data;
   },
 
@@ -49,7 +57,7 @@ export const scoutingReportsApi = {
   async update(id: string, data: UpdateScoutingReportInput) {
     const response = await apiClient.patch<{ data: ScoutingReport }>(
       `/scouting/reports/${id}`,
-      data
+      data,
     );
     return response.data;
   },
@@ -59,7 +67,7 @@ export const scoutingReportsApi = {
    */
   async submit(id: string) {
     const response = await apiClient.post<{ data: ScoutingReport }>(
-      `/scouting/reports/${id}/submit`
+      `/scouting/reports/${id}/submit`,
     );
     return response.data;
   },
@@ -70,7 +78,7 @@ export const scoutingReportsApi = {
   async approve(id: string, recommendation: string) {
     const response = await apiClient.post<{ data: ScoutingReport }>(
       `/scouting/reports/${id}/approve`,
-      { recommendation }
+      { recommendation },
     );
     return response.data;
   },
@@ -80,7 +88,7 @@ export const scoutingReportsApi = {
    */
   async reject(id: string) {
     const response = await apiClient.post<{ data: ScoutingReport }>(
-      `/scouting/reports/${id}/reject`
+      `/scouting/reports/${id}/reject`,
     );
     return response.data;
   },
@@ -98,7 +106,7 @@ export const scoutingReportsApi = {
    */
   async getMyStats() {
     const response = await apiClient.get<{ data: ScoutingReportStats }>(
-      '/scouting/reports/stats/my-stats'
+      '/scouting/reports/stats/my-stats',
     );
     return response.data;
   },
@@ -114,7 +122,7 @@ export const watchlistApi = {
   async add(data: AddToWatchlistInput) {
     const response = await apiClient.post<{ data: PlayerWatchlist }>(
       '/scouting/watchlist',
-      data
+      data,
     );
     return response.data;
   },
@@ -123,7 +131,9 @@ export const watchlistApi = {
    * Get my watchlist
    */
   async getMyWatchlist() {
-    const response = await apiClient.get<{ data: PlayerWatchlist[] }>('/scouting/watchlist');
+    const response = await apiClient.get<{ data: PlayerWatchlist[] }>(
+      '/scouting/watchlist',
+    );
     return response.data;
   },
 
@@ -140,7 +150,7 @@ export const watchlistApi = {
    */
   async check(playerId: string) {
     const response = await apiClient.get<{ data: { isInWatchlist: boolean } }>(
-      `/scouting/watchlist/check/${playerId}`
+      `/scouting/watchlist/check/${playerId}`,
     );
     return response.data;
   },
@@ -156,7 +166,7 @@ export const assignmentsApi = {
   async create(data: CreateAssignmentInput) {
     const response = await apiClient.post<{ data: ScoutingAssignment }>(
       '/scouting/assignments',
-      data
+      data,
     );
     return response.data;
   },
@@ -167,7 +177,7 @@ export const assignmentsApi = {
   async getMyAssignments(status?: string) {
     const response = await apiClient.get<{ data: ScoutingAssignment[] }>(
       '/scouting/assignments/my-assignments',
-      { params: { status } }
+      { params: { status } },
     );
     return response.data;
   },
@@ -178,7 +188,7 @@ export const assignmentsApi = {
   async getDirectorView(status?: string) {
     const response = await apiClient.get<{ data: ScoutingAssignment[] }>(
       '/scouting/assignments/director-view',
-      { params: { status } }
+      { params: { status } },
     );
     return response.data;
   },
@@ -189,7 +199,7 @@ export const assignmentsApi = {
   async update(id: string, data: UpdateAssignmentInput) {
     const response = await apiClient.patch<{ data: ScoutingAssignment }>(
       `/scouting/assignments/${id}`,
-      data
+      data,
     );
     return response.data;
   },
@@ -200,7 +210,7 @@ export const assignmentsApi = {
   async updateStatus(id: string, status: string) {
     const response = await apiClient.patch<{ data: ScoutingAssignment }>(
       `/scouting/assignments/${id}/status`,
-      { status }
+      { status },
     );
     return response.data;
   },

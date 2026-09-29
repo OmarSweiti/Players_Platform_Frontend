@@ -1,6 +1,7 @@
 // Medical Module Types for Frontend
 
-export type TreatmentStatus = 'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+export type TreatmentStatus =
+  'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
 
 export interface MedicalRecord {
   id: string;

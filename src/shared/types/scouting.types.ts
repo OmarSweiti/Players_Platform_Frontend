@@ -1,8 +1,10 @@
 // Scouting Types for Frontend
 
-export type ScoutReportStatus = 'DRAFT' | 'SUBMITTED' | 'UNDER_REVIEW' | 'APPROVED' | 'REJECTED';
+export type ScoutReportStatus =
+  'DRAFT' | 'SUBMITTED' | 'UNDER_REVIEW' | 'APPROVED' | 'REJECTED';
 
-export type RecommendationLevel = 'STRONG_SIGN' | 'SIGN' | 'MONITOR' | 'NOT_SUITABLE';
+export type RecommendationLevel =
+  'STRONG_SIGN' | 'SIGN' | 'MONITOR' | 'NOT_SUITABLE';
 
 export type WatchlistPriority = 'HIGH' | 'MEDIUM' | 'LOW';
 

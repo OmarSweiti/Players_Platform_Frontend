@@ -10,24 +10,29 @@ import { useResetPassword } from '@/features/auth/hooks/use-auth';
 import { Button, Input, Label } from '@/shared/ui';
 import { ROUTES } from '@/shared/lib/constants';
 
-const resetPasswordSchema = z.object({
-  newPassword: z
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .regex(/\d/, 'Password must contain at least one number')
-    .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, 'Password must contain at least one special character'),
-  confirmPassword: z.string(),
-}).refine((data) => {
-  if (data.newPassword !== data.confirmPassword) {
-    return {
-      message: 'Passwords do not match',
-      path: ['confirmPassword'],
-    };
-  }
-  return true;
-});
+const resetPasswordSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .regex(/\d/, 'Password must contain at least one number')
+      .regex(
+        /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/,
+        'Password must contain at least one special character',
+      ),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => {
+    if (data.newPassword !== data.confirmPassword) {
+      return {
+        message: 'Passwords do not match',
+        path: ['confirmPassword'],
+      };
+    }
+    return true;
+  });
 
 type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 
@@ -67,7 +72,7 @@ export default function ResetPasswordContent() {
         onSuccess: () => {
           setIsSuccess(true);
         },
-      }
+      },
     );
   };
 
@@ -76,7 +81,10 @@ export default function ResetPasswordContent() {
       <div className="flex justify-center p-12">
         <div className="text-center">
           <p className="text-muted-foreground">Invalid reset link</p>
-          <Link href={ROUTES.LOGIN} className="text-primary hover:underline mt-2 inline-block">
+          <Link
+            href={ROUTES.LOGIN}
+            className="text-primary hover:underline mt-2 inline-block"
+          >
             Back to login
           </Link>
         </div>
@@ -95,7 +103,8 @@ export default function ResetPasswordContent() {
         </div>
 
         <div className="rounded-md bg-green-50 p-4 text-sm text-green-800 dark:bg-green-900/20 dark:text-green-400">
-          You can now log in with your new password. All other sessions have been invalidated for security.
+          You can now log in with your new password. All other sessions have
+          been invalidated for security.
         </div>
 
         <Link href={ROUTES.LOGIN}>
@@ -109,9 +118,7 @@ export default function ResetPasswordContent() {
     <div className="space-y-6">
       <div className="space-y-2 text-center">
         <h1 className="text-3xl font-bold">Reset Password</h1>
-        <p className="text-muted-foreground">
-          Enter your new password below
-        </p>
+        <p className="text-muted-foreground">Enter your new password below</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -125,7 +132,8 @@ export default function ResetPasswordContent() {
             {...register('newPassword')}
           />
           <p className="text-xs text-muted-foreground">
-            Must be at least 8 characters with uppercase, lowercase, number, and special character
+            Must be at least 8 characters with uppercase, lowercase, number, and
+            special character
           </p>
         </div>
 
@@ -142,7 +150,8 @@ export default function ResetPasswordContent() {
 
         {resetPasswordMutation.error && (
           <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-            {resetPasswordMutation.error.message || 'Failed to reset password. Please try again.'}
+            {resetPasswordMutation.error.message ||
+              'Failed to reset password. Please try again.'}
           </div>
         )}
 
@@ -156,7 +165,10 @@ export default function ResetPasswordContent() {
       </form>
 
       <div className="text-center text-sm">
-        <Link href={ROUTES.LOGIN} className="font-medium text-primary hover:underline">
+        <Link
+          href={ROUTES.LOGIN}
+          className="font-medium text-primary hover:underline"
+        >
           Back to login
         </Link>
       </div>

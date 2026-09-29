@@ -1,4 +1,8 @@
-import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+} from 'axios';
 import { API_CONFIG, STORAGE_KEYS } from '@/shared/lib/constants';
 import type { ApiResponse } from '@/shared/types';
 
@@ -9,7 +13,7 @@ export class ApiError extends Error {
   constructor(
     public statusCode: number,
     public message: string,
-    public errors?: Array<{ field?: string; message: string; code?: string }>
+    public errors?: Array<{ field?: string; message: string; code?: string }>,
   ) {
     super(message);
     this.name = 'ApiError';
@@ -18,7 +22,7 @@ export class ApiError extends Error {
 
 /**
  * Production-grade API client with interceptors
- * 
+ *
  * Features:
  * - Automatic tenant ID injection
  * - Token refresh handling
@@ -62,17 +66,20 @@ class ApiClient {
 
         // Development logging
         if (process.env.NODE_ENV === 'development') {
-          console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`, {
-            params: config.params,
-            data: config.data,
-          });
+          console.log(
+            `[API Request] ${config.method?.toUpperCase()} ${config.url}`,
+            {
+              params: config.params,
+              data: config.data,
+            },
+          );
         }
 
         return config;
       },
       (error) => {
         return Promise.reject(error);
-      }
+      },
     );
 
     // Response interceptor
@@ -80,15 +87,20 @@ class ApiClient {
       (response) => {
         // Development logging
         if (process.env.NODE_ENV === 'development') {
-          console.log(`[API Response] ${response.status} ${response.config.url}`, {
-            data: response.data,
-          });
+          console.log(
+            `[API Response] ${response.status} ${response.config.url}`,
+            {
+              data: response.data,
+            },
+          );
         }
 
         return response;
       },
       async (error: AxiosError<ApiResponse>) => {
-        const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+        const originalRequest = error.config as InternalAxiosRequestConfig & {
+          _retry?: boolean;
+        };
 
         // Handle 401 Unauthorized - attempt token refresh
         if (error.response?.status === 401 && !originalRequest._retry) {
@@ -111,23 +123,25 @@ class ApiClient {
           try {
             // Attempt to refresh token
             await this.refreshToken();
-            
+
             // Process queued requests
             this.processQueue(null);
-            
+
             // Retry original request
             return this.instance(originalRequest);
           } catch (refreshError) {
             this.processQueue(refreshError);
-            
+
             // Auto-logout: Clear client-side state and redirect
             this.handleAutoLogout();
-            
-            return Promise.reject(new ApiError(
-              401,
-              'Authentication expired. Please log in again.',
-              undefined
-            ));
+
+            return Promise.reject(
+              new ApiError(
+                401,
+                'Authentication expired. Please log in again.',
+                undefined,
+              ),
+            );
           } finally {
             this.isRefreshing = false;
           }
@@ -136,12 +150,14 @@ class ApiClient {
         // Transform error to our custom ApiError
         const apiError = new ApiError(
           error.response?.status || 500,
-          error.response?.data?.message || error.message || 'An unexpected error occurred',
-          error.response?.data?.errors
+          error.response?.data?.message ||
+            error.message ||
+            'An unexpected error occurred',
+          error.response?.data?.errors,
         );
 
         return Promise.reject(apiError);
-      }
+      },
     );
   }
 
@@ -179,7 +195,7 @@ class ApiClient {
 
     // Clear non-sensitive client-side state
     localStorage.removeItem(STORAGE_KEYS.TENANT_ID);
-    
+
     // Optionally clear other app state
     sessionStorage.clear();
 
@@ -187,7 +203,7 @@ class ApiClient {
     if (typeof window !== 'undefined') {
       // Store logout reason for displaying on login page
       sessionStorage.setItem('logout_reason', 'session_expired');
-      
+
       // Redirect to login using Next.js router (preserves SPA behavior)
       // Use window.location for full page reload to clear any cached state
       setTimeout(() => {
@@ -205,14 +221,17 @@ class ApiClient {
     await axios.post(
       `${API_CONFIG.BASE_URL}/auth/refresh`,
       {},
-      { withCredentials: true }
+      { withCredentials: true },
     );
   }
 
   /**
    * GET request
    */
-  async get<T = unknown>(url: string, config?: Record<string, unknown>): Promise<ApiResponse<T>> {
+  async get<T = unknown>(
+    url: string,
+    config?: Record<string, unknown>,
+  ): Promise<ApiResponse<T>> {
     const response = await this.instance.get<ApiResponse<T>>(url, config);
     return response.data;
   }
@@ -220,15 +239,27 @@ class ApiClient {
   /**
    * POST request
    */
-  async post<T = unknown>(url: string, data?: unknown, config?: Record<string, unknown>): Promise<ApiResponse<T>> {
-    const response = await this.instance.post<ApiResponse<T>>(url, data, config);
+  async post<T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: Record<string, unknown>,
+  ): Promise<ApiResponse<T>> {
+    const response = await this.instance.post<ApiResponse<T>>(
+      url,
+      data,
+      config,
+    );
     return response.data;
   }
 
   /**
    * PUT request
    */
-  async put<T = unknown>(url: string, data?: unknown, config?: Record<string, unknown>): Promise<ApiResponse<T>> {
+  async put<T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: Record<string, unknown>,
+  ): Promise<ApiResponse<T>> {
     const response = await this.instance.put<ApiResponse<T>>(url, data, config);
     return response.data;
   }
@@ -236,15 +267,26 @@ class ApiClient {
   /**
    * PATCH request
    */
-  async patch<T = unknown>(url: string, data?: unknown, config?: Record<string, unknown>): Promise<ApiResponse<T>> {
-    const response = await this.instance.patch<ApiResponse<T>>(url, data, config);
+  async patch<T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: Record<string, unknown>,
+  ): Promise<ApiResponse<T>> {
+    const response = await this.instance.patch<ApiResponse<T>>(
+      url,
+      data,
+      config,
+    );
     return response.data;
   }
 
   /**
    * DELETE request
    */
-  async delete<T = unknown>(url: string, config?: Record<string, unknown>): Promise<ApiResponse<T>> {
+  async delete<T = unknown>(
+    url: string,
+    config?: Record<string, unknown>,
+  ): Promise<ApiResponse<T>> {
     const response = await this.instance.delete<ApiResponse<T>>(url, config);
     return response.data;
   }
@@ -252,7 +294,11 @@ class ApiClient {
   /**
    * File upload with FormData
    */
-  async upload<T = unknown>(url: string, formData: FormData, config?: Record<string, unknown>): Promise<ApiResponse<T>> {
+  async upload<T = unknown>(
+    url: string,
+    formData: FormData,
+    config?: Record<string, unknown>,
+  ): Promise<ApiResponse<T>> {
     const response = await this.instance.post<ApiResponse<T>>(url, formData, {
       ...config,
       headers: {

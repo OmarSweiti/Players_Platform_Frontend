@@ -7,23 +7,31 @@ import { test as base, expect, type Page } from '@playwright/test';
 const WCAG_AA = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 const BLOCKING = new Set(['serious', 'critical']);
 
-type Violation = Awaited<ReturnType<AxeBuilder['analyze']>>['violations'][number];
+type Violation = Awaited<
+  ReturnType<AxeBuilder['analyze']>
+>['violations'][number];
 
 // Enough to find the element: the rule, its impact and the first selectors.
 const summarize = ({ id, impact, help, nodes }: Violation) =>
-  `${impact}: ${id} — ${help} — ${nodes.slice(0, 3).map((n) => n.target.join(' ')).join(', ')}` +
-  (nodes.length > 3 ? ` and ${nodes.length - 3} more` : '');
+  `${impact}: ${id} — ${help} — ${nodes
+    .slice(0, 3)
+    .map((n) => n.target.join(' '))
+    .join(', ')}` + (nodes.length > 3 ? ` and ${nodes.length - 3} more` : '');
 
 /** Runs axe on the page as it stands; call it after every in-journey navigation. */
 export async function expectAccessible(page: Page): Promise<void> {
-  const { violations } = await new AxeBuilder({ page }).withTags(WCAG_AA).analyze();
+  const { violations } = await new AxeBuilder({ page })
+    .withTags(WCAG_AA)
+    .analyze();
   const blocking = violations.filter((v) => BLOCKING.has(v.impact ?? ''));
   const advisory = violations.filter((v) => !BLOCKING.has(v.impact ?? ''));
   if (advisory.length > 0) {
-    await base.info().attach(`axe advisory findings on ${new URL(page.url()).pathname}`, {
-      body: JSON.stringify(advisory.map(summarize), null, 2),
-      contentType: 'application/json',
-    });
+    await base
+      .info()
+      .attach(`axe advisory findings on ${new URL(page.url()).pathname}`, {
+        body: JSON.stringify(advisory.map(summarize), null, 2),
+        contentType: 'application/json',
+      });
   }
   expect(
     blocking.map(summarize),

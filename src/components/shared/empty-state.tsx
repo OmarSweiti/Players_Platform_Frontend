@@ -21,7 +21,9 @@ export function EmptyState({ title, description, action }: EmptyStateProps) {
         />
       </svg>
       <h3 className="text-lg font-semibold">{title}</h3>
-      {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
+      {description && (
+        <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+      )}
       {action && <div className="mt-4">{action}</div>}
     </div>
   );

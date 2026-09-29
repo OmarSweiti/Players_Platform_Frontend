@@ -3,7 +3,7 @@
  */
 
 // User roles (must match backend enum)
-export type UserRole = 
+export type UserRole =
   | 'SUPER_ADMIN'
   | 'OWNER'
   | 'ADMIN'

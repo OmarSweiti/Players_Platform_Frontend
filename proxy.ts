@@ -22,7 +22,7 @@ const authRoutes = [ROUTES.LOGIN, ROUTES.REGISTER, ROUTES.FORGOT_PASSWORD];
 /**
  * Proxy function for route protection and authentication checks
  * (Next.js 16+ replacement for middleware)
- * 
+ *
  * Features:
  * - Whitelist-based route protection (more secure than blacklist)
  * - Redirects authenticated users away from auth pages
@@ -32,13 +32,13 @@ const authRoutes = [ROUTES.LOGIN, ROUTES.REGISTER, ROUTES.FORGOT_PASSWORD];
  */
 export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-  
+
   // Check if user has authentication cookie (HTTP-only)
   // Backend sets secure HTTP-only cookies, so we check for their existence
   // Checking multiple possible cookie names for compatibility
-  const hasAuthCookie = 
-    request.cookies.has('accessToken') || 
-    request.cookies.has('refreshToken') || 
+  const hasAuthCookie =
+    request.cookies.has('accessToken') ||
+    request.cookies.has('refreshToken') ||
     request.cookies.has('auth_token');
 
   const isAuthenticated = hasAuthCookie;
@@ -50,10 +50,10 @@ export function proxy(request: NextRequest) {
   }
 
   // If accessing protected route while not authenticated, redirect to login
-  const isPublicRoute = publicRoutes.some(route => 
-    pathname === route || pathname.startsWith(route + '/')
+  const isPublicRoute = publicRoutes.some(
+    (route) => pathname === route || pathname.startsWith(route + '/'),
   );
-  
+
   if (!isAuthenticated && !isPublicRoute) {
     const loginUrl = new URL(ROUTES.LOGIN, request.url);
     loginUrl.searchParams.set('redirect', pathname); // Preserve intended destination
