@@ -1,11 +1,15 @@
 import type { Page } from '@playwright/test';
+import ar from '../../messages/ar.json';
+import en from '../../messages/en.json';
 import { expect, test } from './fixtures';
 
 // The route map (0.9.1): one tree under /{locale}. Until the session of
 // 0.9.5, the proxy routes on the presence of a session cookie only, so the
 // signed-in crawl sets a placeholder one.
 
-const localeOf = () => test.info().project.name;
+const CATALOGS = { ar, en };
+const localeOf = () => test.info().project.name as keyof typeof CATALOGS;
+const notFoundTitle = () => CATALOGS[localeOf()].states.notFound.title;
 
 async function signInPlaceholder(page: Page): Promise<void> {
   const baseURL = test.info().project.use.baseURL;
@@ -24,7 +28,7 @@ async function crawl(page: Page, start: string): Promise<string[]> {
     const response = await page.goto(path);
     expect([path, response?.status()]).toEqual([path, 200]);
     await expect(
-      page.getByRole('heading', { name: 'Page not found' }),
+      page.getByRole('heading', { name: notFoundTitle() }),
       path,
     ).toHaveCount(0);
 
@@ -68,12 +72,12 @@ test('an_unknown_route_renders_not_found', async ({ page }) => {
     const response = await page.goto(path);
     expect([path, response?.status()]).toEqual([path, 404]);
     await expect(
-      page.getByRole('heading', { name: 'Page not found' }),
+      page.getByRole('heading', { name: notFoundTitle() }),
     ).toBeVisible();
   }
 
-  // Without a locale, the address gains the default one first.
+  // Without a locale, the address first gains the browser's.
   const response = await page.goto('/no-such-page');
   expect(response?.status()).toBe(404);
-  expect(new URL(page.url()).pathname).toBe('/ar/no-such-page');
+  expect(new URL(page.url()).pathname).toBe(`/${locale}/no-such-page`);
 });

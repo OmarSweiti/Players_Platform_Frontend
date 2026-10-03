@@ -1,6 +1,12 @@
+import createMiddleware from 'next-intl/middleware';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { DEFAULT_LOCALE, isLocale } from './src/i18n/locales';
+import { routing } from './src/i18n/routing';
+
+// Locale routing (0.9.2): a path without a locale is sent to the one the
+// browser prefers, else Arabic; the request then carries its locale to the
+// server components that render `<html lang dir>`.
+const handleLocaleRouting = createMiddleware(routing);
 
 /**
  * Pages a visitor without a session may open, within a locale.
@@ -12,22 +18,16 @@ const publicRoutes = ['/sign-in'];
  * Proxy function for route protection and authentication checks
  * (Next.js 16+ replacement for middleware)
  *
- * Every route lives under /{locale} (0.9.1): a path without a supported
- * locale gains the default one. Within a locale, routing only looks at
- * whether a session cookie is present — it decides nothing; the session
- * itself arrives with 0.9.5.
+ * Every route lives under /{locale} (0.9.1): locale routing runs first.
+ * Within a locale, routing only looks at whether a session cookie is
+ * present — it decides nothing; the session itself arrives with 0.9.5.
  */
 export function proxy(request: NextRequest) {
+  const localized = handleLocaleRouting(request);
+  if (localized.headers.has('location')) return localized; // gaining a locale
+
   const pathname = request.nextUrl.pathname;
-  const [, first = ''] = pathname.split('/');
-
-  if (!isLocale(first)) {
-    const url = request.nextUrl.clone();
-    url.pathname = `/${DEFAULT_LOCALE}${pathname === '/' ? '' : pathname}`;
-    return NextResponse.redirect(url);
-  }
-
-  const locale = first;
+  const [, locale = routing.defaultLocale] = pathname.split('/');
   const route = pathname.slice(locale.length + 1) || '/';
 
   // Check if user has authentication cookie (HTTP-only)
@@ -55,7 +55,7 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(signInUrl);
   }
 
-  return NextResponse.next();
+  return localized;
 }
 
 // Configure proxy matcher for optimal performance

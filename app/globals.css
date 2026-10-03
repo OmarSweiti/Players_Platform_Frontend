@@ -21,6 +21,14 @@
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
   --radius: var(--radius);
+  /* Each glyph from its own face — Latin from Geist, Arabic from IBM Plex
+     Sans Arabic (app/layout.tsx) — and only then their metric-matched
+     fallbacks: those are local Arial, which has Arabic glyphs and would draw
+     Arabic text before the Arabic face if it came earlier. */
+  --font-sans:
+    'Geist', 'IBM Plex Sans Arabic', 'Geist Fallback',
+    'IBM Plex Sans Arabic Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 :root {
