@@ -41,7 +41,7 @@ export function Sidebar() {
   const logoutMutation = useLogout();
 
   return (
-    <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:border-r bg-background">
+    <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:border-e bg-background">
       <div className="flex h-16 items-center border-b px-6">
         <Link
           href={`/${locale}`}
@@ -91,7 +91,8 @@ export function Sidebar() {
           onClick={() => logoutMutation.mutate()}
           disabled={logoutMutation.isPending}
         >
-          <LogOut className="h-4 w-4" />
+          {/* Points the way out: mirrored in right-to-left */}
+          <LogOut className="h-4 w-4 rtl:-scale-x-100" />
           {logoutMutation.isPending ? t('loggingOut') : t('logout')}
         </Button>
       </div>

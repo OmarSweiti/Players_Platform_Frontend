@@ -27,8 +27,11 @@ export default function DashboardLayout({
       {/* Mobile Sidebar */}
       <div
         className={cn(
-          'fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 lg:hidden',
-          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full',
+          'fixed inset-y-0 start-0 z-50 w-64 transform transition-transform duration-300 lg:hidden',
+          // Off-screen on the start side: the left in English, the right in Arabic
+          isMobileMenuOpen
+            ? 'translate-x-0'
+            : '-translate-x-full rtl:translate-x-full',
         )}
       >
         <Sidebar />
