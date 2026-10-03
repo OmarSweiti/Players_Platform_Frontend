@@ -1,0 +1,13 @@
+# `npx depcheck` (0.2.7): every package the code imports is declared, and
+# every declared package is imported. Exceptions, each one used where
+# depcheck cannot see:
+ignores:
+  # postcss.config.mjs loads it; app/globals.css imports tailwindcss
+  - '@tailwindcss/postcss'
+  - 'tailwindcss'
+  # the justfile's lint and format recipes run it
+  - 'prettier'
+ignorePatterns:
+  # deliberately broken imports for the boundary gate's own test; they
+  # import server-only, which the application installs with 0.9.4
+  - 'tests/architecture/fixtures'

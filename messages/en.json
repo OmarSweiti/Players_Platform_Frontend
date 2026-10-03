@@ -1,8 +1,8 @@
 {
   "app": {
-    "name": "Players Platform",
-    "title": "Players Platform - Football Management System",
-    "description": "Professional football player management platform"
+    "name": "Sadara",
+    "title": "Sadara — player management for sports agencies",
+    "description": "Players, contracts and documents for sports agencies, in Arabic and English."
   },
   "navigation": {
     "home": "Home",
