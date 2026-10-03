@@ -67,6 +67,7 @@ boundaries-prune:
 
 # Type-check every TypeScript file, imported or not
 typecheck:
+    npx --no-install next typegen
     npx --no-install tsc --noEmit
 
 # Production build

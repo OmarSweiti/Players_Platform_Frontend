@@ -37,10 +37,10 @@ function pageRoutes(dir = 'app', prefix = ''): string[] {
 async function expectRetired(page: Page, route: string): Promise<void> {
   const response = await page.goto(route);
   const landed = new URL(page.url()).pathname;
-  expect([route, response?.status() === 404 || landed === '/login']).toEqual([
+  expect([
     route,
-    true,
-  ]);
+    response?.status() === 404 || /^\/(ar|en)\/sign-in$/.test(landed),
+  ]).toEqual([route, true]);
   await expect(page.locator('input[type="password"]'), route).toHaveCount(0);
 }
 
