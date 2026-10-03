@@ -15,7 +15,7 @@ cd frontend && npm run dev                                     # :3001, served a
 | `just check` | type-check, lint and formatting, the production build, the unit tests and the browser journeys — what CI's required `test` check runs |
 | `just format` | rewrite the application code in Prettier's format |
 | `just test` · `just test-e2e` | the unit and component tests (Vitest) · the browser journeys in Arabic and English, with accessibility checks (Playwright, axe) |
-| `npm run api:generate` | regenerate the typed API client from the backend's committed contract |
+| `npm run api:generate` | regenerate the typed API client from the backend's committed contract *(arrives with plan step 0.9.4)* |
 | `just pr '<title>'` · `just merge <URL>` | ship a change through the flow — see `CONTRIBUTING.md` |
 
 **Read `AGENTS.md` before writing code**: this Next.js version differs from what most tools and models
