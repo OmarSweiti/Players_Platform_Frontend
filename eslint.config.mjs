@@ -6,6 +6,9 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   {
+    // The files Next's configs cover — the plugins these rules belong to are
+    // registered for them only, and a .cjs tool config would crash ESLint.
+    files: ['**/*.{js,jsx,mjs,ts,tsx,mts,cts}'],
     // A zero-warning gate: what is worth reporting is an error, so the
     // baseline in eslint-suppressions.json can record it and only shrink.
     rules: {
@@ -31,6 +34,8 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
+    // Deliberately broken imports for the boundary gate's own test (0.2.10).
+    'tests/architecture/fixtures/**',
   ]),
 ]);
 

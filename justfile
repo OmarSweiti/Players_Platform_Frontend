@@ -57,6 +57,14 @@ format:
 lint-prune:
     npx --no-install eslint --prune-suppressions
 
+# Module boundaries (dependency-cruiser) and the browser boundary: a new violation fails, and so does a recorded one that is fixed
+boundaries:
+    node scripts/check-boundaries.mjs
+
+# After fixing recorded boundary violations: drop them from the baseline
+boundaries-prune:
+    node scripts/check-boundaries.mjs --prune
+
 # Type-check every TypeScript file, imported or not
 typecheck:
     npx --no-install tsc --noEmit
@@ -74,7 +82,7 @@ test-e2e: build
     npx --no-install playwright test
 
 # The same gate as CI's required `test` check
-check: typecheck lint build test test-e2e
+check: typecheck lint boundaries build test test-e2e
 
 # The complete local gate: the CI checks, every guard, and a full-history secret scan
 pre-push: check guards

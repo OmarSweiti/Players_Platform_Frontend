@@ -1,0 +1,42 @@
+[
+  {
+    "rule": "the-app-uses-features-through-their-index",
+    "from": "app/(auth)/forgot-password/page.tsx",
+    "to": "src/features/auth/hooks/use-auth.ts"
+  },
+  {
+    "rule": "the-app-uses-features-through-their-index",
+    "from": "app/(auth)/login/page.tsx",
+    "to": "src/features/auth/hooks/use-auth.ts"
+  },
+  {
+    "rule": "the-app-uses-features-through-their-index",
+    "from": "app/(auth)/register/page.tsx",
+    "to": "src/features/auth/hooks/use-auth.ts"
+  },
+  {
+    "rule": "the-app-uses-features-through-their-index",
+    "from": "app/(auth)/reset-password/reset-password-content.tsx",
+    "to": "src/features/auth/hooks/use-auth.ts"
+  },
+  {
+    "rule": "the-app-uses-features-through-their-index",
+    "from": "app/(auth)/verify-email/verify-email-content.tsx",
+    "to": "src/features/auth/hooks/use-auth.ts"
+  },
+  {
+    "rule": "the-app-uses-features-through-their-index",
+    "from": "app/(dashboard)/settings/2fa/page.tsx",
+    "to": "src/features/auth/hooks/use-auth.ts"
+  },
+  {
+    "rule": "the-app-uses-features-through-their-index",
+    "from": "src/components/providers/auth-provider.tsx",
+    "to": "src/features/auth/hooks/use-auth.ts"
+  },
+  {
+    "rule": "the-app-uses-features-through-their-index",
+    "from": "src/components/providers/auth-provider.tsx",
+    "to": "src/features/auth/types/auth.types.ts"
+  }
+]
