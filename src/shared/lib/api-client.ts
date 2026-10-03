@@ -27,8 +27,11 @@ export class ApiError extends Error {
  * - Automatic tenant ID injection
  * - Token refresh handling
  * - Centralized error handling
- * - Request/response logging in development
  * - Timeout configuration
+ *
+ * It never logs a request or a response: bodies carry passwords, tokens and
+ * personal data, and a URL's query can carry a token. The browser's network
+ * panel shows requests in development.
  */
 class ApiClient {
   private instance: AxiosInstance;
@@ -64,17 +67,6 @@ class ApiClient {
           config.headers['X-Tenant-ID'] = tenantId;
         }
 
-        // Development logging
-        if (process.env.NODE_ENV === 'development') {
-          console.log(
-            `[API Request] ${config.method?.toUpperCase()} ${config.url}`,
-            {
-              params: config.params,
-              data: config.data,
-            },
-          );
-        }
-
         return config;
       },
       (error) => {
@@ -84,19 +76,7 @@ class ApiClient {
 
     // Response interceptor
     this.instance.interceptors.response.use(
-      (response) => {
-        // Development logging
-        if (process.env.NODE_ENV === 'development') {
-          console.log(
-            `[API Response] ${response.status} ${response.config.url}`,
-            {
-              data: response.data,
-            },
-          );
-        }
-
-        return response;
-      },
+      (response) => response,
       async (error: AxiosError<ApiResponse>) => {
         const originalRequest = error.config as InternalAxiosRequestConfig & {
           _retry?: boolean;
