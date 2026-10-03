@@ -70,9 +70,14 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           node-version-file: .nvmrc
-      - name: No high or critical npm advisory in the lockfile
+      - name: No high or critical npm advisory, except a reviewed, expiring exception for development tools
         if: ${{ !cancelled() }}
-        run: npm audit --audit-level high
+        run: |
+          set -euo pipefail
+          allow=.npm-audit-allowlist.json
+          if [ ! -f "$allow" ]; then allow="$RUNNER_TEMP/none.json"; echo '[]' >"$allow"; fi
+          npm audit --json >"$RUNNER_TEMP/audit.json" || true
+          node scripts/npm-audit-gate.mjs --allowlist "$allow" --audit "$RUNNER_TEMP/audit.json" --lockfile package-lock.json
 
   # A red weekly run leaves ONE standing issue (commented on each failure),
   # not an email nobody reads. Schedule-only: never a required check.

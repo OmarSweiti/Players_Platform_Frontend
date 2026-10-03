@@ -26,7 +26,7 @@ Expect an acknowledgement within a few working days.
 | Changes arrive through pull requests only, on legal routes | rulesets on `development`, `staging`, `main`; the `topology` required check |
 | Release tags never move or disappear | the `tags-v-append-only` ruleset, which binds the admin too |
 | The code type-checks and builds | the `test` required check |
-| No high or critical npm advisory in the lockfile | `npm audit --audit-level high` in the `supply-chain` required check and the weekly security lane; Dependabot alerts + security updates |
+| No high or critical npm advisory in the lockfile | `npm audit` judged by `scripts/npm-audit-gate.mjs` in the `supply-chain` required check and the weekly security lane; Dependabot alerts + security updates. The only exceptions are reviewed, expiring entries in `.npm-audit-allowlist.json`, each with a reason, read from the base branch (a pull request cannot excuse its own advisory) and valid only while npm's lockfile marks every copy of the package development-only |
 | Code-level vulnerabilities are looked for | CodeQL default setup (extended suite) on every PR and weekly |
 | Workflow security | SHA-pinned actions (enforced repository-wide), read-only default token, zizmor + actionlint |
 
