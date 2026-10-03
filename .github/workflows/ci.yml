@@ -112,7 +112,7 @@ jobs:
           set -euo pipefail
           policy="$RUNNER_TEMP/policy"
           mkdir -p "$policy"
-          for file in .gitleaks.toml scripts/check-attribution.sh; do
+          for file in .gitleaks.toml scripts/check-attribution.sh scripts/npm-audit-gate.mjs; do
             if [ "$EVENT_NAME" = pull_request ] && git cat-file -e "$BASE_SHA:$file" 2>/dev/null; then
               git show "$BASE_SHA:$file" >"$policy/${file##*/}"
             else
@@ -140,9 +140,28 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           node-version-file: .nvmrc
-      - name: No high or critical npm advisory in the lockfile
+      - name: No high or critical npm advisory, except a reviewed, expiring exception for development tools
         if: ${{ !cancelled() }}
-        run: npm audit --audit-level high
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          # The exceptions come from the trusted base, never from the pull
+          # request, so a change cannot excuse its own advisory; a base without
+          # the file has none. A push reads the branch it landed on.
+          allow="$RUNNER_TEMP/npm-audit-allowlist.json"
+          if [ "$EVENT_NAME" = pull_request ]; then
+            git show "$BASE_SHA:.npm-audit-allowlist.json" >"$allow" 2>/dev/null || echo '[]' >"$allow"
+          elif [ -f .npm-audit-allowlist.json ]; then
+            cp .npm-audit-allowlist.json "$allow"
+          else
+            echo '[]' >"$allow"
+          fi
+          # npm audit exits non-zero whenever it finds anything; the gate decides.
+          npm audit --json >"$RUNNER_TEMP/audit.json" || true
+          node "$RUNNER_TEMP/policy/npm-audit-gate.mjs" --allowlist "$allow" \
+            --audit "$RUNNER_TEMP/audit.json" --lockfile package-lock.json
 
   # Runs AFTER a promotion lands (a push to staging or main) and inspects what
   # actually landed: a promotion must be a merge commit, because a squash forks

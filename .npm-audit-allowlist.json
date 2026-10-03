@@ -1,0 +1,9 @@
+[
+  {
+    "advisory": "GHSA-vfj7-8cjw-p6xm",
+    "package": "braces",
+    "reason": "CVE-2026-93687: stack exhaustion on deeply nested glob patterns. No fixed braces release exists (3.0.3 is the latest). It reaches this app only through the lint tooling (eslint-config-next → @next/eslint-plugin-next → fast-glob → micromatch → braces), which runs on our own source during development and CI and is never shipped; the gate proves that from the lockfile on every run.",
+    "added": "2026-10-03",
+    "expires": "2026-11-02"
+  }
+]
