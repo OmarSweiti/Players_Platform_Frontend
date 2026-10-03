@@ -61,6 +61,12 @@ jobs:
       - name: Format — the application code is Prettier-formatted
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npx --no-install prettier --check "app/**/*.{ts,tsx,css}" "src/**/*.{ts,tsx,css}" "tests/**/*.ts" "*.{ts,mts,mjs}"
+      # Independent of the linter: features through their index.ts, src/shared
+      # free of features, and nothing server-only in a client bundle
+      # (.dependency-cruiser.cjs, scripts/client-boundary.mjs, ADR-0025).
+      - name: Module boundaries — and nothing server-only reaches the browser
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node scripts/check-boundaries.mjs
       # Vitest owns src/**/*.test.{ts,tsx}; Playwright owns tests/**/*.spec.ts.
       # Both exit non-zero when they find no test, so an emptied suite fails.
       - name: Unit and component tests — Vitest in jsdom, MSW for the API
