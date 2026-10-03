@@ -8,15 +8,6 @@ export const API_CONFIG = {
 } as const;
 
 /**
- * Application Constants
- */
-export const APP_CONFIG = {
-  NAME: process.env.NEXT_PUBLIC_APP_NAME || 'Players Platform',
-  VERSION: '1.0.0',
-  SUPPORT_EMAIL: 'support@playersplatform.com',
-} as const;
-
-/**
  * Storage Keys (for non-sensitive data only)
  */
 export const STORAGE_KEYS = {
