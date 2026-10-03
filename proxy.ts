@@ -6,18 +6,12 @@ import { ROUTES } from './src/shared/lib/constants';
  * Public routes that do NOT require authentication
  * Using whitelist approach - everything else is protected by default
  */
-const publicRoutes = [
-  ROUTES.LOGIN,
-  ROUTES.REGISTER,
-  ROUTES.FORGOT_PASSWORD,
-  '/verify-email',
-  '/reset-password',
-];
+const publicRoutes = [ROUTES.LOGIN];
 
 /**
  * Auth routes that should redirect authenticated users to dashboard
  */
-const authRoutes = [ROUTES.LOGIN, ROUTES.REGISTER, ROUTES.FORGOT_PASSWORD];
+const authRoutes = [ROUTES.LOGIN];
 
 /**
  * Proxy function for route protection and authentication checks

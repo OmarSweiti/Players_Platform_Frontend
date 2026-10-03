@@ -1,8 +1,7 @@
 'use client';
 
 import { createContext, useContext, ReactNode } from 'react';
-import { useCurrentUser } from '@/features/auth/hooks/use-auth';
-import type { User } from '@/features/auth/types/auth.types';
+import type { User } from '@/features/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -12,22 +11,23 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Signed out, plainly. The browser cannot know the member: the session
+// cookies are HttpOnly, which is the point, and the hook that waited for them
+// to become readable never ran a query. The session arrives with 0.9.5, from
+// GET /api/v1/auth/session.
+const SIGNED_OUT: AuthContextType = {
+  user: null,
+  isAuthenticated: false,
+  isLoading: false,
+};
+
 /**
  * Auth Provider - Manages authentication state across the application
- *
- * Uses React Query's useCurrentUser hook to fetch and cache user data.
- * Provides authentication context to all child components.
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const { data: user, isLoading } = useCurrentUser();
-
-  const value: AuthContextType = {
-    user: user || null,
-    isAuthenticated: !!user,
-    isLoading,
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={SIGNED_OUT}>{children}</AuthContext.Provider>
+  );
 }
 
 /**

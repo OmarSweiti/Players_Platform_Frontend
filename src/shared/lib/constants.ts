@@ -22,10 +22,6 @@ export const APP_CONFIG = {
 export const ROUTES = {
   // Auth routes
   LOGIN: '/login',
-  REGISTER: '/register',
-  FORGOT_PASSWORD: '/forgot-password',
-  RESET_PASSWORD: (token: string) => `/reset-password?token=${token}`,
-  VERIFY_EMAIL: (token: string) => `/verify-email?token=${token}`,
 
   // Dashboard routes
   DASHBOARD: '/dashboard',

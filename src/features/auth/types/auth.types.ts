@@ -1,7 +1,8 @@
 import type { UserRole } from '@/shared/types';
 
 /**
- * User entity matching backend structure
+ * User entity matching backend structure. No credential or second-factor
+ * field: those belong to the identity provider (0.1.7).
  */
 export interface User {
   id: string;
@@ -13,83 +14,6 @@ export interface User {
   isActive: boolean;
   lastLoginAt?: string;
   emailVerifiedAt?: string;
-  is2FAEnabled: boolean;
-  twoFASecret?: string;
   createdAt: string;
   updatedAt: string;
-}
-
-/**
- * Authentication response from login/register
- */
-export interface AuthResponse {
-  accessToken: string;
-  refreshToken: string;
-  user: User;
-}
-
-/**
- * Login credentials
- */
-export interface LoginPayload {
-  email: string;
-  password: string;
-}
-
-/**
- * Registration data
- */
-export interface RegisterPayload {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  tenantId: string;
-}
-
-/**
- * Token refresh response
- */
-export interface RefreshTokenResponse {
-  accessToken: string;
-  refreshToken: string;
-}
-
-/**
- * Forgot password payload
- */
-export interface ForgotPasswordPayload {
-  email: string;
-}
-
-/**
- * Reset password payload
- */
-export interface ResetPasswordPayload {
-  token: string;
-  newPassword: string;
-}
-
-/**
- * Change password payload
- */
-export interface ChangePasswordPayload {
-  currentPassword: string;
-  newPassword: string;
-}
-
-/**
- * Resend verification payload
- */
-export interface ResendVerificationPayload {
-  email: string;
-}
-
-/**
- * Session state
- */
-export interface Session {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
 }
