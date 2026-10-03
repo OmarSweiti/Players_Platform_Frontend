@@ -1,6 +1,7 @@
 'use client';
 
 import { Menu } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/shared/ui/button';
 
 interface HeaderProps {
@@ -8,6 +9,8 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
+  const t = useTranslations('navigation');
+
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background px-6">
       <Button
@@ -17,7 +20,7 @@ export function Header({ onMenuClick }: HeaderProps) {
         onClick={onMenuClick}
       >
         <Menu className="h-5 w-5" />
-        <span className="sr-only">Toggle menu</span>
+        <span className="sr-only">{t('toggleMenu')}</span>
       </Button>
 
       <div className="flex-1">

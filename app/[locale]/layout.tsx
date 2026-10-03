@@ -1,13 +1,16 @@
+import { hasLocale } from 'next-intl';
+import { setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { isLocale } from '@/i18n/locales';
+import { routing } from '@/i18n/routing';
 
-// Every route lives under a supported locale (0.9.1); the proxy prefixes any
-// other path with the default one, so an unknown locale is a missing page.
+// Every route lives under a supported locale (0.9.1); locale routing sends
+// any other path to one, so an unknown locale is a missing page.
 export default async function LocaleLayout({
   children,
   params,
 }: LayoutProps<'/[locale]'>) {
   const { locale } = await params;
-  if (!isLocale(locale)) notFound();
+  if (!hasLocale(routing.locales, locale)) notFound();
+  setRequestLocale(locale);
   return children;
 }

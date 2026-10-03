@@ -1,10 +1,12 @@
-export default function ContractsPage() {
+import { getTranslations } from 'next-intl/server';
+
+export default async function ContractsPage() {
+  const t = await getTranslations('contracts');
+
   return (
     <div className="space-y-2">
-      <h1 className="text-3xl font-bold tracking-tight">Contracts</h1>
-      <p className="text-muted-foreground">
-        Contracts and their deadlines will appear here.
-      </p>
+      <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+      <p className="text-muted-foreground">{t('description')}</p>
     </div>
   );
 }

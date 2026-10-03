@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/shared/lib/utils';
 import {
   LayoutDashboard,
@@ -19,21 +20,23 @@ import { useLogout, useAuth } from '@/features/auth';
 // join with their pages.
 const navigationFor = (locale: string) =>
   [
-    { name: 'Home', href: `/${locale}` as const, icon: LayoutDashboard },
-    { name: 'Players', href: `/${locale}/players` as const, icon: Users },
+    { key: 'home', href: `/${locale}` as const, icon: LayoutDashboard },
+    { key: 'players', href: `/${locale}/players` as const, icon: Users },
     {
-      name: 'Contracts',
+      key: 'contracts',
       href: `/${locale}/contracts` as const,
       icon: FileText,
     },
-    { name: 'Legal', href: `/${locale}/legal` as const, icon: Scale },
-    { name: 'Settings', href: `/${locale}/settings` as const, icon: Settings },
+    { key: 'legal', href: `/${locale}/legal` as const, icon: Scale },
+    { key: 'settings', href: `/${locale}/settings` as const, icon: Settings },
   ] as const;
 
 export function Sidebar() {
   const pathname = usePathname();
   const { locale } = useParams<{ locale: string }>();
   const navigation = navigationFor(locale);
+  const t = useTranslations('navigation');
+  const tApp = useTranslations('app');
   const { user } = useAuth();
   const logoutMutation = useLogout();
 
@@ -44,7 +47,7 @@ export function Sidebar() {
           href={`/${locale}`}
           className="flex items-center gap-2 font-bold text-xl"
         >
-          ⚽ Players Platform
+          {tApp('name')}
         </Link>
       </div>
 
@@ -56,7 +59,7 @@ export function Sidebar() {
               (item.href !== `/${locale}` &&
                 pathname.startsWith(item.href + '/'));
             return (
-              <li key={item.name}>
+              <li key={item.key}>
                 <Link
                   href={item.href}
                   className={cn(
@@ -67,7 +70,7 @@ export function Sidebar() {
                   )}
                 >
                   <item.icon className="h-5 w-5" />
-                  {item.name}
+                  {t(item.key)}
                 </Link>
               </li>
             );
@@ -89,7 +92,7 @@ export function Sidebar() {
           disabled={logoutMutation.isPending}
         >
           <LogOut className="h-4 w-4" />
-          {logoutMutation.isPending ? 'Logging out...' : 'Logout'}
+          {logoutMutation.isPending ? t('loggingOut') : t('logout')}
         </Button>
       </div>
     </aside>

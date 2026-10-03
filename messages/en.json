@@ -1,0 +1,55 @@
+{
+  "app": {
+    "name": "Players Platform",
+    "title": "Players Platform - Football Management System",
+    "description": "Professional football player management platform"
+  },
+  "navigation": {
+    "home": "Home",
+    "players": "Players",
+    "contracts": "Contracts",
+    "legal": "Legal",
+    "settings": "Settings",
+    "toggleMenu": "Open or close the menu",
+    "logout": "Log out",
+    "loggingOut": "Logging out…"
+  },
+  "signIn": {
+    "title": "Sign in",
+    "description": "Members sign in through their agency’s identity provider.",
+    "action": "Sign in"
+  },
+  "home": {
+    "title": "Home",
+    "description": "Your tasks, alerts and upcoming events will appear here."
+  },
+  "players": {
+    "title": "Players",
+    "description": "The player directory will appear here."
+  },
+  "contracts": {
+    "title": "Contracts",
+    "description": "Contracts and their deadlines will appear here."
+  },
+  "legal": {
+    "title": "Legal",
+    "description": "Legal requests and their due dates will appear here."
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Agency and member settings will appear here."
+  },
+  "states": {
+    "loading": "Loading…",
+    "error": {
+      "title": "Something went wrong",
+      "description": "This page could not be shown. Try again in a moment.",
+      "retry": "Try again"
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "There is no page at this address.",
+      "home": "Go to the home page"
+    }
+  }
+}
