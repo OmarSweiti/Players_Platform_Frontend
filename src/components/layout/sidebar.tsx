@@ -1,36 +1,39 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { cn } from '@/shared/lib/utils';
-import { ROUTES } from '@/shared/lib/constants';
 import {
   LayoutDashboard,
   Users,
   FileText,
-  Dumbbell,
-  TrendingUp,
   Scale,
-  MessageSquare,
   Settings,
   LogOut,
 } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { useLogout, useAuth } from '@/features/auth';
 
-const navigation = [
-  { name: 'Dashboard', href: ROUTES.DASHBOARD, icon: LayoutDashboard },
-  { name: 'Players', href: ROUTES.PLAYERS, icon: Users },
-  { name: 'Contracts', href: ROUTES.CONTRACTS, icon: FileText },
-  { name: 'Training', href: ROUTES.TRAINING, icon: Dumbbell },
-  { name: 'Performance', href: ROUTES.PERFORMANCE, icon: TrendingUp },
-  { name: 'Legal', href: ROUTES.LEGAL, icon: Scale },
-  { name: 'Chat', href: ROUTES.CHAT, icon: MessageSquare },
-  { name: 'Settings', href: ROUTES.SETTINGS, icon: Settings },
-];
+// Features by noun, under the locale (0.9.1). A link to a route that does
+// not exist fails the type-check (typedRoutes); areas without routes yet
+// join with their pages.
+const navigationFor = (locale: string) =>
+  [
+    { name: 'Home', href: `/${locale}` as const, icon: LayoutDashboard },
+    { name: 'Players', href: `/${locale}/players` as const, icon: Users },
+    {
+      name: 'Contracts',
+      href: `/${locale}/contracts` as const,
+      icon: FileText,
+    },
+    { name: 'Legal', href: `/${locale}/legal` as const, icon: Scale },
+    { name: 'Settings', href: `/${locale}/settings` as const, icon: Settings },
+  ] as const;
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { locale } = useParams<{ locale: string }>();
+  const navigation = navigationFor(locale);
   const { user } = useAuth();
   const logoutMutation = useLogout();
 
@@ -38,7 +41,7 @@ export function Sidebar() {
     <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:border-r bg-background">
       <div className="flex h-16 items-center border-b px-6">
         <Link
-          href={ROUTES.DASHBOARD}
+          href={`/${locale}`}
           className="flex items-center gap-2 font-bold text-xl"
         >
           ⚽ Players Platform
@@ -49,7 +52,9 @@ export function Sidebar() {
         <ul className="space-y-1">
           {navigation.map((item) => {
             const isActive =
-              pathname === item.href || pathname.startsWith(item.href + '/');
+              pathname === item.href ||
+              (item.href !== `/${locale}` &&
+                pathname.startsWith(item.href + '/'));
             return (
               <li key={item.name}>
                 <Link

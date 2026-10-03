@@ -25,7 +25,7 @@ export default defineConfig({
   ],
   webServer: {
     command: `npx --no-install next start --hostname 127.0.0.1 --port ${port}`,
-    url: `${baseURL}/login`,
+    url: `${baseURL}/ar/sign-in`,
     reuseExistingServer: false, // always the build this run made, never a stale server
     timeout: 120_000,
     env: { NEXT_TELEMETRY_DISABLED: '1' },

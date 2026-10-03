@@ -1,31 +1,34 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { ROUTES } from './src/shared/lib/constants';
+import { DEFAULT_LOCALE, isLocale } from './src/i18n/locales';
 
 /**
- * Public routes that do NOT require authentication
+ * Pages a visitor without a session may open, within a locale.
  * Using whitelist approach - everything else is protected by default
  */
-const publicRoutes = [ROUTES.LOGIN];
-
-/**
- * Auth routes that should redirect authenticated users to dashboard
- */
-const authRoutes = [ROUTES.LOGIN];
+const publicRoutes = ['/sign-in'];
 
 /**
  * Proxy function for route protection and authentication checks
  * (Next.js 16+ replacement for middleware)
  *
- * Features:
- * - Whitelist-based route protection (more secure than blacklist)
- * - Redirects authenticated users away from auth pages
- * - Preserves intended destination via redirect parameter
- * - Uses constants for maintainability
- * - Performance optimized with matcher config
+ * Every route lives under /{locale} (0.9.1): a path without a supported
+ * locale gains the default one. Within a locale, routing only looks at
+ * whether a session cookie is present — it decides nothing; the session
+ * itself arrives with 0.9.5.
  */
 export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+  const [, first = ''] = pathname.split('/');
+
+  if (!isLocale(first)) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${DEFAULT_LOCALE}${pathname === '/' ? '' : pathname}`;
+    return NextResponse.redirect(url);
+  }
+
+  const locale = first;
+  const route = pathname.slice(locale.length + 1) || '/';
 
   // Check if user has authentication cookie (HTTP-only)
   // Backend sets secure HTTP-only cookies, so we check for their existence
@@ -35,23 +38,21 @@ export function proxy(request: NextRequest) {
     request.cookies.has('refreshToken') ||
     request.cookies.has('auth_token');
 
-  const isAuthenticated = hasAuthCookie;
-
-  // If accessing auth pages while authenticated, redirect to dashboard
-  const isAuthRoute = (authRoutes as readonly string[]).includes(pathname);
-  if (isAuthenticated && isAuthRoute) {
-    return NextResponse.redirect(new URL(ROUTES.DASHBOARD, request.url));
+  // Signed in, the sign-in page leads home
+  if (hasAuthCookie && route === '/sign-in') {
+    return NextResponse.redirect(new URL(`/${locale}`, request.url));
   }
 
-  // If accessing protected route while not authenticated, redirect to login
+  // If accessing protected route while not authenticated, redirect to sign-in
   const isPublicRoute = publicRoutes.some(
-    (route) => pathname === route || pathname.startsWith(route + '/'),
+    (publicRoute) =>
+      route === publicRoute || route.startsWith(publicRoute + '/'),
   );
 
-  if (!isAuthenticated && !isPublicRoute) {
-    const loginUrl = new URL(ROUTES.LOGIN, request.url);
-    loginUrl.searchParams.set('redirect', pathname); // Preserve intended destination
-    return NextResponse.redirect(loginUrl);
+  if (!hasAuthCookie && !isPublicRoute) {
+    const signInUrl = new URL(`/${locale}/sign-in`, request.url);
+    signInUrl.searchParams.set('redirect', pathname); // Preserve intended destination
+    return NextResponse.redirect(signInUrl);
   }
 
   return NextResponse.next();

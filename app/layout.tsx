@@ -19,11 +19,11 @@ export const metadata: Metadata = {
   description: 'Professional football player management platform',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+// The root layout, above /{locale} so that app/not-found.tsx answers every
+// unmatched address inside it. The text is English in both locales until the
+// catalogs of 0.9.2, which render `lang` and `dir` from the locale on the
+// server.
+export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html
       lang="en"

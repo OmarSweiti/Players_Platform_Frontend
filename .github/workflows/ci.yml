@@ -42,9 +42,13 @@ jobs:
         run: npm ci --no-audit --no-fund
       # Each wall reports its own verdict: one red step must not hide the next.
       # Keep these steps equal to `just check`, the same gate on your laptop.
-      - name: Type-check every TypeScript file, imported or not
+      # typegen first: with typedRoutes, a link to a route that does not exist
+      # fails here, and no stale generated type from a deleted page lingers.
+      - name: Type-check every TypeScript file, imported or not — links included
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
-        run: npx --no-install tsc --noEmit
+        run: |
+          npx --no-install next typegen
+          npx --no-install tsc --noEmit
       - name: Production build
         id: build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}

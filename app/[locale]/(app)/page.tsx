@@ -1,15 +1,10 @@
-import { useAuth } from '@/features/auth';
-
-export default function DashboardPage() {
-  const { user } = useAuth();
-
+export default function HomePage() {
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
         <p className="text-muted-foreground">
-          Welcome back, {user?.firstName}! Here&apos;s what&apos;s happening
-          with your platform.
+          Welcome back. Here&apos;s what&apos;s happening with your agency.
         </p>
       </div>
 

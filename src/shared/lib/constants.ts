@@ -17,27 +17,6 @@ export const APP_CONFIG = {
 } as const;
 
 /**
- * Route Constants - Type-safe route definitions
- */
-export const ROUTES = {
-  // Auth routes
-  LOGIN: '/login',
-
-  // Dashboard routes
-  DASHBOARD: '/dashboard',
-  PLAYERS: '/dashboard/players',
-  PLAYER_DETAIL: (id: string) => `/dashboard/players/${id}`,
-  PLAYER_NEW: '/dashboard/players/new',
-  CONTRACTS: '/dashboard/contracts',
-  CONTRACT_DETAIL: (id: string) => `/dashboard/contracts/${id}`,
-  TRAINING: '/dashboard/training',
-  PERFORMANCE: '/dashboard/performance',
-  LEGAL: '/dashboard/legal',
-  CHAT: '/dashboard/chat',
-  SETTINGS: '/dashboard/settings',
-} as const;
-
-/**
  * Storage Keys (for non-sensitive data only)
  */
 export const STORAGE_KEYS = {

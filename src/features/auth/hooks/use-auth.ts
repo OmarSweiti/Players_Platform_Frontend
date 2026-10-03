@@ -1,9 +1,8 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { authApi } from '../api/auth.api';
-import { ROUTES } from '@/shared/lib/constants';
 
 /**
  * Hook for user logout
@@ -11,6 +10,8 @@ import { ROUTES } from '@/shared/lib/constants';
 export function useLogout() {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { locale } = useParams<{ locale: string }>();
+  const signIn = `/${locale}/sign-in` as const;
 
   return useMutation({
     mutationFn: authApi.logout,
@@ -19,12 +20,12 @@ export function useLogout() {
       queryClient.clear();
 
       // Use Next.js router for proper navigation
-      router.push(ROUTES.LOGIN);
+      router.push(signIn);
     },
     onError: () => {
       // Even if logout API fails, clear local state and redirect
       queryClient.clear();
-      router.push(ROUTES.LOGIN);
+      router.push(signIn);
     },
   });
 }
