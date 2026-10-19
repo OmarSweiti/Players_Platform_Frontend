@@ -1,7 +1,2 @@
 {
-  "src/shared/lib/api-client.ts": {
-    "@next/next/no-location-assign-relative-destination": {
-      "count": 1
-    }
-  }
 }

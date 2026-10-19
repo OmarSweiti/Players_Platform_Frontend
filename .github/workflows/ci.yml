@@ -42,6 +42,15 @@ jobs:
         run: npm ci --no-audit --no-fund
       # Each wall reports its own verdict: one red step must not hide the next.
       # Keep these steps equal to `just check`, the same gate on your laptop.
+      # The client is typed by the backend's committed contract (0.9.4): the
+      # copy is the backend's own at the commit openapi/source.json records,
+      # and the types are exactly what the generator makes of it.
+      - name: The API contract is the backend's, and the client's types are generated from it
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: |
+          node scripts/contract.mjs verify
+          npm run api:generate
+          git diff --exit-code -- src/shared/api/schema.d.ts
       # typegen first: with typedRoutes, a link to a route that does not exist
       # fails here, and no stale generated type from a deleted page lingers.
       - name: Type-check every TypeScript file, imported or not — links included

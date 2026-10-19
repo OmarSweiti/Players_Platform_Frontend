@@ -82,8 +82,20 @@ test:
 test-e2e: build
     npx --no-install playwright test
 
+# The API contract (0.9.4): openapi/openapi.json is the backend's at the commit openapi/source.json records,
+# and src/shared/api/schema.d.ts is what openapi-typescript generates from it
+contract:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    node scripts/contract.mjs verify
+    npm run --silent api:generate >/dev/null
+    git diff --exit-code -- src/shared/api/schema.d.ts || {
+      echo "contract: src/shared/api/schema.d.ts was stale — now regenerated; review and commit it" >&2
+      exit 1
+    }
+
 # The same gate as CI's required `test` check
-check: typecheck lint boundaries build test test-e2e
+check: contract typecheck lint boundaries build test test-e2e
 
 # The complete local gate: the CI checks, every guard, and a full-history secret scan
 pre-push: check guards
