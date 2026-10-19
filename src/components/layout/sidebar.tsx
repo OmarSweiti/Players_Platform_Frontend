@@ -38,7 +38,7 @@ export function Sidebar() {
   const t = useTranslations('navigation');
   const tApp = useTranslations('app');
   const { user } = useAuth();
-  const logoutMutation = useLogout();
+  const logout = useLogout();
 
   return (
     <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:border-e bg-background">
@@ -88,12 +88,11 @@ export function Sidebar() {
         <Button
           variant="outline"
           className="w-full justify-start gap-2"
-          onClick={() => logoutMutation.mutate()}
-          disabled={logoutMutation.isPending}
+          onClick={logout}
         >
           {/* Points the way out: mirrored in right-to-left */}
           <LogOut className="h-4 w-4 rtl:-scale-x-100" />
-          {logoutMutation.isPending ? t('loggingOut') : t('logout')}
+          {t('logout')}
         </Button>
       </div>
     </aside>

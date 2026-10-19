@@ -39,6 +39,33 @@ just merge                                           # squash, bound to the exac
 - **No assistant attribution.** Coding assistants are tools, not co-authors:
   `Co-Authored-By:` trailers and "Generated with…" lines are refused everywhere.
 
+## Calling the API
+
+Every call goes through the client generated from the backend's committed
+contract (ADR-0010, ADR-0025): `openapi/openapi.json` is the backend's
+`openapi/openapi.json`, byte for byte, at the backend commit
+`openapi/source.json` records, and `src/shared/api/schema.d.ts` is what
+`openapi-typescript` generates from it.
+
+- A server render reads through `serverApi(locale)` (`src/server/api/`): the
+  API's internal address (`API_INTERNAL_URL`, see `.env.example`), the
+  session cookie and nothing else of the request, no cache.
+- The browser uses `createApiClient({ locale })` (`src/shared/api/`) against
+  `/api/v1` on its own origin.
+- `unwrap(call)` returns the body, `{ data }` or `{ data, page }`, and throws
+  an `ApiProblem` (status, code, field errors, request id) for any failure.
+- No request names a tenant: the client refuses the header.
+
+When the backend's contract changes, bring it over and regenerate:
+
+```bash
+npm run api:sync -- <backend commit>   # the full SHA, pushed: the copy is read from GitHub
+npm run api:generate
+```
+
+`just contract` checks it as CI does: the copy is the backend's at the recorded
+commit, and the types are the generator's.
+
 ## Before you push
 
 `just pre-push` runs the complete local gate: type-check, lint, build, the unit

@@ -11,8 +11,7 @@
     "legal": "Legal",
     "settings": "Settings",
     "toggleMenu": "Open or close the menu",
-    "logout": "Log out",
-    "loggingOut": "Logging out…"
+    "logout": "Log out"
   },
   "signIn": {
     "title": "Sign in",

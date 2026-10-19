@@ -1,31 +1,21 @@
 'use client';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
-import { authApi } from '../api/auth.api';
+import { useCallback } from 'react';
 
 /**
- * Hook for user logout
+ * Sign out, as far as the browser can today: forget every cached query, then
+ * return to sign-in. The API has no sign-out yet (`0.5.7`); `0.9.5` calls it
+ * through the generated client and then the provider's sign-out.
  */
 export function useLogout() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { locale } = useParams<{ locale: string }>();
-  const signIn = `/${locale}/sign-in` as const;
 
-  return useMutation({
-    mutationFn: authApi.logout,
-    onSuccess: () => {
-      // Clear all queries from cache
-      queryClient.clear();
-
-      // Use Next.js router for proper navigation
-      router.push(signIn);
-    },
-    onError: () => {
-      // Even if logout API fails, clear local state and redirect
-      queryClient.clear();
-      router.push(signIn);
-    },
-  });
+  return useCallback(() => {
+    queryClient.clear();
+    router.push(`/${locale}/sign-in`);
+  }, [queryClient, router, locale]);
 }

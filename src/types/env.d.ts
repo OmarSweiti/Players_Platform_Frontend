@@ -1,7 +1,8 @@
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      NEXT_PUBLIC_API_URL: string;
+      /** The API's address for server renders (src/server/api); unset until configured. */
+      API_INTERNAL_URL?: string;
       NEXT_PUBLIC_APP_NAME: string;
     }
   }
