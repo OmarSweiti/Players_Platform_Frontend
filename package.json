@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint",
     "api:sync": "node scripts/contract.mjs sync",
-    "api:generate": "openapi-typescript openapi/openapi.json --output src/shared/api/schema.d.ts"
+    "api:generate": "openapi-typescript openapi/openapi.json --output src/shared/api/schema.d.ts",
+    "evidence": "node scripts/capture-evidence.mjs"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.15",
