@@ -24,7 +24,9 @@ feat/<slug> ──squash──► development ──merge commit──► stagin
 just branch feat/player-profile                      # from a fresh development
 git commit -m "feat(players): add the profile page  [#12]"
 just pr 'feat(players): add the profile page  [#12]'  # local gate → push → PR → waits for required checks
-just merge                                           # squash, bound to the exact head that was checked
+just evidence <PR URL> report.md shots/    # in the umbrella: the validation evidence, for the head commit
+# … the maintainer reviews and approves on GitHub …
+just merge                                           # only once approved: squash, bound to the checked head
 ```
 
 - **Work branches** are `feat|fix|chore|docs|refactor|perf|test/<kebab-slug>`
@@ -36,8 +38,18 @@ just merge                                           # squash, bound to the exac
 - **Promotions** (`just promote-staging`, `just promote-main`, then
   `just promote-merge <PR>`) always use a **merge commit**. A squash would fork
   the branches permanently.
+- **Every PR is approved by the maintainer** — Dependabot's too — and GitHub
+  enforces it: one approving review from the code owner, dismissed by a new
+  push. GitHub refuses an approval from a PR's own author, so `just pr` opens
+  the PR as the engineering app (the umbrella's `just engineering-app`),
+  assigned to the maintainer with their review requested; commits stay yours.
+- **Every PR shows it was validated**: the change run and exercised, with
+  screenshots, posted for the head commit by the umbrella's `just evidence`.
+  The required `validation` check refuses a PR without it
+  (`scripts/check-validation.sh`).
 - **No assistant attribution.** Coding assistants are tools, not co-authors:
-  `Co-Authored-By:` trailers and "Generated with…" lines are refused everywhere.
+  `Co-Authored-By:` trailers, "Generated with…" lines and assistant names are
+  refused everywhere — commits, branches, titles, PR bodies and comments.
 
 ## Calling the API
 
