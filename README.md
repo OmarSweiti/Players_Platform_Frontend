@@ -1,5 +1,7 @@
 # Sadara — frontend
 
+![visitors](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2FOmarSweiti%2F229af67d9bc546cc61727dc7eb321a77%2Fraw%2Fvisitors.json)
+
 The web app of the Sadara player-management platform, in Arabic and English: Next.js 16, React 19,
 TypeScript, Tailwind 4. Part of [Players_Platform](https://github.com/OmarSweiti/Players_Platform), which
 holds the plan, the local stack and the progress record — **start there**.
